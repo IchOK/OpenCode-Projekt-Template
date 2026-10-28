@@ -1,0 +1,22 @@
+# Optional structured execution record; automatic extraction to be verified.
+task_id: TASK-XXXX
+runs:
+  - run_id: RUN-XXXX
+    session_id: null
+    agent_role: worker
+    agent_name: worker
+    model_id: null
+    model_revision: null
+    started_at: null
+    ended_at: null
+    duration_ms: null
+    status: unknown
+    branch: null
+    commit: null
+    tests: []
+    failure_reason: null
+    correction_attempt: 0
+    tokens_input: null
+    tokens_output: null
+    cost: null
+    notes: null

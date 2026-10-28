@@ -1,0 +1,19 @@
+# Desired policy only. OpenCode does not automatically enforce this file.
+# Normative rules and enforcement/verification status: docs/process/multi-agent-orchestration.md (§3, §7).
+# This file is the single source of truth for the concrete limit values.
+agents:
+  coordinator:
+    implementation_allowed: false
+  workers:
+    max_parallel: 3
+    isolated_worktrees: true
+  retries:
+    default_max_corrections_per_issue: 3
+    limit_change_requires_human_approval: true
+  integration:
+    require_tests: true
+    require_documentation: true
+    require_spec_compliance: true
+  logging:
+    automatic: true
+    optional_telemetry_nonblocking: true
