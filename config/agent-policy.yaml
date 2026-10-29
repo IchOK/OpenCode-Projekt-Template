@@ -1,5 +1,5 @@
-# Desired policy only. OpenCode does not automatically enforce this file.
-# Normative rules and enforcement/verification status: docs/process/multi-agent-orchestration.md (§3, §7).
+# Desired policy values. OpenCode injects this file via `instructions` but does
+# not enforce the numbers. Native enforcement status: docs/process/multi-agent-orchestration.md (§3, §7).
 # This file is the single source of truth for the concrete limit values.
 agents:
   coordinator:

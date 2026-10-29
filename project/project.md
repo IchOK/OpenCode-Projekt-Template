@@ -1,10 +1,10 @@
 ---
 id: PROJECT-0001
 title: "Titel des aktiven Projekts"
-version: 0.1.0
-template_version: 0.1.0
+version: 0.1.2
+template_version: 0.3.0
 created_at: 2026-10-24
-modified_at: 2026-10-24
+modified_at: 2026-10-29
 author: ""
 modified_by: ""
 status: Draft
@@ -18,28 +18,33 @@ references:
 review_required: []
 ---
 
-# Project Description
+# Projektbeschreibung
 
-**Positioning:** This document conveys project context and development goals.
-It does not replace approved requirements, functional specifications, or ADRs.
-Statements about concrete components reflect the current planning state, not
-immutable rules.
+> **Sprache:** Fließtext, Überschriften und Tabellenköpfe **Deutsch**. YAML-Feldnamen und Statuswerte bleiben englisch. Vorlage: [`../docs/templates/project.md`](../docs/templates/project.md). Der Coordinator schreibt diese Datei nicht auf Englisch um.
 
-> Structure and content guidance: [`../docs/templates/project.md`](../docs/templates/project.md).
+**Einordnung:** Dieses Dokument vermittelt Projektkontext und Entwicklungsziele.
+Es ersetzt keine freigegebenen Anforderungen (REQ), Funktionsspezifikationen (FSPEC) oder Architekturentscheidungen (ADR).
+Aussagen zu konkreten Bausteinen sind Planungsstand, keine unveränderlichen Regeln.
 
-## 1. Purpose and Vision
+Die Projektbeschreibung ist auf Deutsch. Alle übrigen Projektdokumente
+(REQ, FSPEC, ADR, Tasks, Reports, Logs) werden auf Englisch verfasst.
 
-<!-- TODO -->
+> Gliederung und Ausfüllhilfe: [`../docs/templates/project.md`](../docs/templates/project.md).
+> Ausgefülltes Beispiel: [`project-example.md`](project-example.md).
 
-## 2. Goals and Success Criteria at Project Level
-
-<!-- TODO -->
-
-## 3. Planned Use Cases
+## 1. Zweck und Vision
 
 <!-- TODO -->
 
-## 4. System Overview
+## 2. Ziele und Erfolgskriterien auf Projektebene
+
+<!-- TODO -->
+
+## 3. Geplante Anwendungsfälle
+
+<!-- TODO -->
+
+## 4. Systemübersicht
 
 ### Hardware
 
@@ -49,47 +54,51 @@ immutable rules.
 
 <!-- TODO -->
 
-### Connectivity
+### Kommunikation
 
 <!-- TODO -->
 
-### Backend/Operations
+### Backend/Betrieb
 
 <!-- TODO -->
 
-## 5. Operation, Safety and Control
+## 5. Bedienung, Betrieb, Sicherheit
 
 <!-- TODO -->
 
-## 6. Project Boundaries and Non-Goals
+## 6. Projektgrenzen und Nichtziele
 
 <!-- TODO -->
 
-## 7. Planned Milestones
+## 7. Geplante Meilensteine
 
-| Phase | Content | Evidence (preliminary) |
+| Phase | Inhalt | Nachweis (vorläufig) |
 |---|---|---|
 | M1 | | |
 
-## 8. Open Decisions and Risks
+## 8. Offene Entscheidungen und Risiken
 
 <!-- TODO -->
 
-## 9. Development and Documentation Process
+Siehe auch [`todo-register.md`](todo-register.md).
 
-- Version control and hosting location:
+## 9. Entwicklungs- und Dokumentationsprozess
+
+- Versionskontrolle und Hosting-Ort:
 - [`docs/process/document-lifecycle.md`](../docs/process/document-lifecycle.md)
 - [`docs/process/multi-agent-orchestration.md`](../docs/process/multi-agent-orchestration.md)
 - [`AGENTS.md`](../AGENTS.md)
-- Workflow chain: idea → approved requirement → approved FSPEC → **explicit
-  implementation start** → tasks/implementation → verification and implementation documentation.
+- Ablaufkette: Idee → freigegebenes Requirement → freigegebene FSPEC → **expliziter
+  Implementierungsstart** → Tasks/Implementierung → Verifikation und Implementation Report.
 
-> **Active project:** This document describes the active project (PROJECT-0001). The structure and content template for new projects is [`docs/templates/project.md`](../docs/templates/project.md).
-- Concurrency: governed by [`config/agent-policy.yaml`](../config/agent-policy.yaml) and PROC-0002.
-- Model assignments are runtime configuration; used models are logged per task.
+> **Aktives Projekt:** Dieses Dokument beschreibt das aktive Projekt (PROJECT-0001). Die Vorlage für neue Projekte ist [`docs/templates/project.md`](../docs/templates/project.md).
+- Parallelität: geregelt durch [`config/agent-policy.yaml`](../config/agent-policy.yaml) und PROC-0002. OpenCode deckelt `max_parallel` nicht nativ.
+- Modellzuordnungen sind Laufzeitkonfiguration; eingesetzte Modelle werden je Task protokolliert.
 
-## 10. Change History
+## 10. Änderungshistorie
 
-| Version | Date | Change |
+| Version | Datum | Änderung |
 |---|---|---|
-| 0.1.0 | 2026-10-24 | Project overview initialized from template. |
+| 0.1.0 | 2026-10-24 | Projektübersicht aus der Vorlage angelegt. |
+| 0.1.1 | 2026-10-29 | Sprache der Projektbeschreibung auf Deutsch; Verweise auf OpenCode-V2-Verdrahtung. |
+| 0.1.2 | 2026-10-29 | Sprachhinweis für den Coordinator; Vorlage 0.3.0. |

@@ -1,0 +1,30 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  // Primary session agent. Re-enable the built-in coding agent with:
+  //   "agents": { "build": { "disabled": false } }
+  // Using `build` bypasses this template's Coordinator workflow.
+  "default_agent": "coordinator",
+  "instructions": [
+    "docs/process/document-lifecycle.md",
+    "docs/process/multi-agent-orchestration.md",
+    "config/agent-policy.yaml",
+  ],
+  "worktree": {
+    "directory": ".worktrees",
+  },
+  "permissions": [
+    { "action": "external_directory", "resource": "*", "effect": "ask" },
+  ],
+  "policies": [
+    // Hard-deny integration-branch mutation via worker-style git commands.
+    // Coordinator git push remains `ask` through agent permissions; a deny
+    // here would block the Coordinator as well, so push is not listed.
+    { "action": "tool.use", "resource": "shell:git push --force *", "effect": "deny" },
+    { "action": "tool.use", "resource": "shell:git push -f *", "effect": "deny" },
+  ],
+  "agents": {
+    "build": {
+      "disabled": true,
+    },
+  },
+}

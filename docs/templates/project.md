@@ -1,8 +1,8 @@
 ---
 id: PROJECT-XXXX
-title: "Project title"
+title: "Projekttitel"
 version: 0.1.0
-template_version: 0.1.0
+template_version: 0.3.0
 created_at: YYYY-MM-DD
 modified_at: YYYY-MM-DD
 author: ""
@@ -18,67 +18,71 @@ references:
 review_required: []
 ---
 
-# Project Description
+# Projektbeschreibung
 
-**Positioning:** This document conveys project context and development goals. It does not replace approved requirements, functional specifications, or ADRs. Statements about concrete components reflect the current planning state, not immutable rules.
+> **Sprache (verbindlich für Coordinator und Menschen):** Der gesamte Fließtext, alle Überschriften und Tabellenköpfe dieser Datei sind **Deutsch**. Das gilt auch für die aktive Übersicht [`../../project/project.md`](../../project/project.md) und das Beispiel [`../../project/project-example.md`](../../project/project-example.md). YAML-Feldnamen und Statuswerte (`Draft`, `Approved`, …) bleiben englisch — das sind Prozess-IDs, keine Fließtextsprache. Der Coordinator darf die Projektbeschreibung **nicht** ins Englische umschreiben.
 
-## 1. Purpose and Vision
+**Einordnung:** Dieses Dokument vermittelt Projektkontext und Entwicklungsziele. Es ersetzt keine freigegebenen Anforderungen (REQ), Funktionsspezifikationen (FSPEC) oder Architekturentscheidungen (ADR). Aussagen zu konkreten Bausteinen sind Planungsstand, keine unveränderlichen Regeln.
 
-Describe the problem the project solves, the rough system concept (major subsystems and their relationship), the intended operating environment, and the chosen development approach (e.g. staged proofs of concept instead of one-shot delivery). State how later extension is intended.
+Anforderungen, Funktionsspezifikationen, ADRs, Tasks, Implementation Reports und Execution Logs werden auf **Englisch** verfasst. Nur die Projektbeschreibung ist Deutsch.
 
-## 2. Goals and Success Criteria at Project Level
+## 1. Zweck und Vision
 
-List the goals as measurable statements (target values, tolerances, operating conditions). Mark anything not yet formalized as such. Note explicitly that goals at this level are **not yet formally approved individual requirements**; measurement methods, tolerances and acceptance criteria are defined in requirements and functional specifications.
+Beschreibe das Problem, das grobe Systemkonzept (wichtige Teilsysteme und ihr Zusammenhang), die vorgesehene Betriebsumgebung und den Entwicklungsansatz (z. B. gestufte Nachweise statt einmaliger Komplettlieferung). Halte fest, wie spätere Erweiterung gedacht ist.
 
-## 3. Planned Use Cases
+## 2. Ziele und Erfolgskriterien auf Projektebene
 
-List the intended scenarios as short numbered use cases: who operates the system, under which conditions, and which system behavior defines success for each scenario.
+Liste die Ziele als messbare Aussagen (Zielwert, Toleranz, Betriebsbedingungen). Kennzeichne alles, was noch nicht formalisiert ist. Halte ausdrücklich fest, dass Ziele auf dieser Ebene **noch keine formal freigegebenen Einzelanforderungen** sind; Messmethoden, Toleranzen und Abnahmekriterien stehen in den englischen REQ- und FSPEC-Dokumenten.
 
-## 4. System Overview
+## 3. Geplante Anwendungsfälle
 
-Describe the major subsystems in subsections, one per subsystem where useful:
+Liste die vorgesehenen Szenarien als kurze nummerierte Anwendungsfälle: wer betreibt das System, unter welchen Bedingungen, und welches Verhalten gilt als Erfolg.
 
-- **Hardware:** selected components and variants, operating locations, platform choices and any planned platform-evaluation path.
-- **Software:** language/runtime choices per component; state the decision-driving rationale and reference the corresponding ADR.
-- **Connectivity:** communication paths and protocols between subsystems, including data that must be transported and what must be verified about interoperability.
-- **Backend/operations:** role of any central planning, monitoring or logging component; per-component operational limits (e.g. one active task at a time, configurable parameters).
+## 4. Systemübersicht
 
-Each unconfirmed selection is marked as to-be-confirmed rather than presented as fixed.
+Beschreibe die großen Teilsysteme in Unterabschnitten, wo sinnvoll je eines:
 
-## 5. Operation, Safety and Control
+- **Hardware:** ausgewählte Komponenten und Varianten, Betriebsorte, Plattformwahl und ggf. geplanter Plattform-Prüfpfad.
+- **Software:** Sprache/Laufzeit je Baustein; begründe die Wahl und verweise auf das zugehörige ADR.
+- **Kommunikation:** Pfade und Protokolle zwischen Teilsystemen, einschließlich der zu transportierenden Daten und der zu prüfenden Interoperabilität.
+- **Backend/Betrieb:** Rolle einer zentralen Planungs-, Monitoring- oder Logging-Komponente; betriebliche Grenzen je Baustein.
 
-Describe the operating concept: what human release is required before operation, how states are reported, defined stop or fallback behavior on communication, positioning or actuator faults, authorization handling for updates/deployments, and which measures are proven versus which are development approaches not yet proven.
+Jede unbestätigte Auswahl als noch zu bestätigen kennzeichnen, nicht als fest darstellen.
 
-## 6. Project Boundaries and Non-Goals
+## 5. Bedienung, Betrieb, Sicherheit
 
-List explicitly what the initial scope excludes — typically: full autonomy or operation in unknown environments, guaranteed safety features not yet proven, regulatory approval or product maturity, and permanent commitment to specific tools, models or frameworks. This section prevents goals from being read as silent commitments.
+Beschreibe das Betriebskonzept: welche menschliche Freigabe vor dem Betrieb nötig ist, wie Zustände gemeldet werden, definiertes Stopp- oder Fallback-Verhalten bei Störungen, Berechtigungen für Updates/Deployments, und welche Maßnahmen nachgewiesen sind versus welche noch Entwicklungsansatz sind.
 
-## 7. Planned Milestones
+## 6. Projektgrenzen und Nichtziele
 
-| Phase | Content | Evidence (preliminary) |
+Liste ausdrücklich, was der erste Umfang ausschließt. Der Abschnitt verhindert, dass Ziele als stille Zusagen gelesen werden.
+
+## 7. Geplante Meilensteine
+
+| Phase | Inhalt | Nachweis (vorläufig) |
 |---|---|---|
-| M1 | <milestone goal> | <observable proof> |
-| M2 | <milestone goal> | <observable proof> |
+| M1 | <Meilensteinziel> | <beobachtbarer Nachweis> |
+| M2 | <Meilensteinziel> | <beobachtbarer Nachweis> |
 
-State that sequence and acceptance criteria are concretized through approved specifications and that the table is a roadmap, not an implementation assignment.
+Halte fest, dass Reihenfolge und Abnahmekriterien durch freigegebene Spezifikationen konkretisiert werden und die Tabelle eine Roadmap ist, kein Implementierungsauftrag.
 
-## 8. Open Decisions and Risks
+## 8. Offene Entscheidungen und Risiken
 
-List open threads as bullets, grouped where helpful: unresolved component selection, technical feasibility questions, operational/safety risks, and external conditions. Point to the loose-end register (todo-register) for items that arise along the way. State that new binding decisions follow the ADR/requirement/specification cycles — not this document.
+Liste offene Fäden, nach Art gruppiert wo hilfreich. Verweise auf das Todo-Register für Punkte, die unterwegs entstehen. Neue verbindliche Entscheidungen folgen den Zyklen für ADR, Anforderungen und Funktionsspezifikationen — nicht diesem Dokument.
 
-## 9. Development and Documentation Process
+## 9. Entwicklungs- und Dokumentationsprozess
 
-- Version control and hosting location.
-- Links to the process rule sets: [`../process/document-lifecycle.md`](../process/document-lifecycle.md), [`../process/multi-agent-orchestration.md`](../process/multi-agent-orchestration.md).
-- Binding agent instructions: [`../../AGENTS.md`](../../AGENTS.md).
-- The workflow chain: see the active project's project description, §9: [`../../project/project.md`](../../project/project.md).
+- Versionskontrolle und Hosting-Ort.
+- Regelwerke: [`../process/document-lifecycle.md`](../process/document-lifecycle.md), [`../process/multi-agent-orchestration.md`](../process/multi-agent-orchestration.md).
+- Verbindliche Agentenanweisungen: [`../../AGENTS.md`](../../AGENTS.md).
+- Ablaufkette des aktiven Projekts: [`../../project/project.md`](../../project/project.md) §9.
 
-> **Template notice:** This document is the template for creating a new project; it does not describe an active project. The referenced workflow chain belongs to the active project.
-- Concurrency note: the coordinator may use at most <n> parallel workers under the conditions defined in the orchestration process document.
-- Model and tool assignments are interchangeable runtime configuration; actual models used are logged per task where possible.
+> **Hinweis Vorlage:** Dieses Dokument ist die Vorlage für ein neues Projekt; es beschreibt kein aktives Projekt. Die referenzierte Ablaufkette gehört zum aktiven Projekt.
+- Parallelität: der Coordinator darf höchstens so viele Worker gleichzeitig nutzen, wie in [`../../config/agent-policy.yaml`](../../config/agent-policy.yaml) steht, unter den Bedingungen in PROC-0002. OpenCode deckelt diese Zahl nicht nativ.
+- Modell- und Tool-Zuordnungen sind austauschbare Laufzeitkonfiguration; eingesetzte Modelle werden je Task protokolliert, soweit verfügbar.
 
-## 10. Change History
+## 10. Änderungshistorie
 
-| Version | Date | Change |
+| Version | Datum | Änderung |
 |---|---|---|
-| 0.1.0 | YYYY-MM-DD | <initial version> |
+| 0.1.0 | YYYY-MM-DD | <Erstversion> |

@@ -1,13 +1,13 @@
 ---
-id: TASK-XXXX   # Task-ID nach Nummerungskonvention in docs/templates/tasks-for-fspec.md
+id: TASK-XXXX
 title: "Task title"
 version: 0.1.0
-template_version: 0.1.0
+template_version: 0.2.0
 created_at: YYYY-MM-DD
 modified_at: YYYY-MM-DD
 author: ""
 assigned_to: ""
-status: Open   # Task status only; FSPEC implementation status is tracked via references.functional_spec
+status: Open
 priority: Medium
 references:
   functional_spec:
@@ -18,8 +18,8 @@ references:
 depends_on: []
 blocked_by: []
 files_scope: []
-repository: null   # Code-Repo des Tasks, z. B. esp32-mesh-framework-gateway; null = Main-only (ADR-0003)
-result_commit: null   # bei Integration als repo@sha führen
+repository: null
+result_commit: null
 completed_at: null
 ---
 

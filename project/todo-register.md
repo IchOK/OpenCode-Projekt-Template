@@ -1,14 +1,14 @@
-# TODO-Register — lose Fäden, bewusst außerhalb des Freigabe-Prozesses
+# TODO register — loose ends, kept outside the approval process
 
-Nicht jedem offenen Punkt steht ein Dokument oder eine FSPEC zu: Dies ist die
-Sammelstelle für Todos, die unterwegs entstehen. **Kein Governance-Objekt, keine
-Approval-Kolonie** — Einträge dürfen jederzeit ohne Freigabe entstehen, geändert und
-auf `Done`/`Wont fix` gezogen werden. Der Register ist bewusst flach (diese eine
-Datei), damit er nie veraltet, und kein Task-Plan hierher zweckt.
+Not every open item deserves a document or an FSPEC. This file collects todos
+that arise along the way. **Not a governance object, no approval cycle** —
+entries may be created, changed, and moved to `Done` / `Wont fix` at any time
+without approval. The register is deliberately flat (this one file) so it does
+not rot, and no task plan belongs here.
 
-Verlinkung: `project.md` (§Offene Entscheidungen) weist auf diese Datei.
-Regel für unterwegs: Wenn ein Todo eine formale Änderung an Approved-REQ/FSPEC/ADR
-verlangt, wird er als Todo gehalten, bis der Freigabezyklus beginnt.
+Link: `project.md` (§8 Open decisions) points to this file.
+Rule: if a todo requires a formal change to an approved REQ/FSPEC/ADR, keep it
+here until the approval cycle starts.
 
-| ID | Status | Todo | Ursprung/Kontext | Blockiert durch | Trigger |
+| ID | Status | Todo | Origin / context | Blocked by | Trigger |
 |---|---|---|---|---|---|

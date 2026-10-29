@@ -1,0 +1,11 @@
+# OpenCode worktrees created per worker task
+.worktrees/
+
+# Optional external reference clones (not project content)
+vendor/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+*~

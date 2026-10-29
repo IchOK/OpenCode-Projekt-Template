@@ -4,6 +4,8 @@ title: "Functional specification title"
 version: 0.1.0
 status: Draft
 created_at: YYYY-MM-DD
+approved_by: null
+approved_at: null
 references:
   requirements: []
   adrs: []
@@ -27,4 +29,4 @@ references:
 Approver: pending  
 Approved version/date: pending
 
-> Approval does not authorize implementation. Implementation status is tracked separately.
+> Approval does not authorize implementation. Implementation status is tracked on the task plan in `docs/tasks/`, not on this `status` field.

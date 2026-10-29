@@ -1,8 +1,15 @@
 # Projektbeschreibung — Beispieldatei
 
-> **Dies ist ein Beispiel** für alle, die das Template zum ersten Mal ausfüllen.
-> Es erklärt, was in die einzelnen Abschnitte gehört und wie man sie formuliert.
-> Zu jedem Abschnitt gibt es nur kurze, allgemeine Beispiele.
+> **Dies ist ein Beispiel**, kein Regelwerk. Nur diese Datei darf
+> anschauliche Domänenbeispiele enthalten. Normative Dateien
+> (`AGENTS.md`, `docs/process/`, `.opencode/agents/`, Templates außer
+> dieser Beispiel-Projektbeschreibung) bleiben generisch.
+>
+> Die Datei zeigt, wie die **deutsche** Projektbeschreibung ausgefüllt
+> wird (Fließtext, Überschriften, Tabellenköpfe). YAML-Feldnamen bleiben
+> englisch. Requirements, FSPECs, ADRs, Tasks und Reports bleiben Englisch.
+> Der Coordinator darf die Projektbeschreibung nicht ins Englische umschreiben.
+>
 > Die Gliederung entspricht exakt
 > [`../docs/templates/project.md`](../docs/templates/project.md).
 > Die eigentliche Projektübersicht steht je Projekt unter `./project.md`.
@@ -55,7 +62,7 @@ fest darzustellen.
 - **Software:** Sprache/Laufzeit je Baustein, mit begründeter Entscheidung und
   ADR-Verweis.
   *Beispiel (kurz): „Warum diese Laufzeit — weil Daten zwischen Knoten geteilt
-  werden, siehe ADR-0003." Begründung wird referenziert, nicht bloß behauptet.*
+  werden, siehe ADR-0001." Begründung wird referenziert, nicht bloß behauptet.*
 - **Kommunikation:** welche Datenpfade bestehen, in welche Richtung, mit
   Interoperabilitäts-Lücken als offene Punkte.
   *Beispiel (kurz): „Gerät → Server (Werte), Server → Webansicht (Anzeige);

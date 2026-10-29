@@ -1,14 +1,16 @@
 ---
 id: PROC-0001
 title: "Document Lifecycle and Multi-Agent Implementation Process"
-status: Approved
-version: 1.0.0
-date: 2026-10-20
-approved_by: "Projektverantwortlicher (human instruction, 2026-10-24)"
-approved_at: 2026-10-24
+status: Draft
+version: 1.1.0
+date: 2026-10-29
+approved_by: null
+approved_at: null
 ---
 
 # Document Lifecycle and Multi-Agent Implementation Process
+
+Version 1.1.0 supersedes 1.0.0 (approved 2026-10-24) and awaits human re-approval.
 
 ## 1. Document types
 - Requirements (REQ): human-approved requirements.
@@ -20,6 +22,10 @@ approved_at: 2026-10-24
 - Traceability Views: matrices/links derived from document frontmatter; regenerated, not manually maintained, not a governance document (§11).
 
 Approved REQ/FSPEC/ADR versions are immutable except through their respective review and human approval process. Tasks and reports are Git-versioned and may evolve within the approved scope.
+
+**Language of artefacts (Coordinator must follow):**
+- Project overview — `project/project.md`, template `docs/templates/project.md`, example `project/project-example.md`: German body, headings and table headers. YAML field names and status tokens stay English.
+- REQ, FSPEC, ADR, TASK, IMP, execution logs and process documents: English.
 
 ## 2. Approval is not authorization
 Approval of a FSPEC does not permit code changes. Implementation requires a separate, explicit human start instruction naming FSPEC ID and version. Log authorization identity, timestamp and FSPEC version. Never infer authorization from status, milestones, an available task or the completion of another FSPEC.
@@ -33,6 +39,8 @@ Approval of a FSPEC does not permit code changes. Implementation requires a sepa
 
 Coordinator may set `Ready to Start`, but only an explicit human start instruction permits transition to `In Progress`. A `Completed` implementation does not authorize the next FSPEC.
 
+Implementation status lives on the FSPEC task plan (`docs/tasks/FSPEC-….md`), not on the FSPEC approval `status` field.
+
 ## 4. Coordinator
 Reviews approved FSPECs and ADRs, creates and assigns tasks, manages dependencies and blockers, reviews changes, performs Git integration operations, arranges integration tests and ensures documentation. The Coordinator **must not** implement or correct production code. A substantive code conflict must be delegated to a Worker. Integration actions such as merge/rebase are allowed, but no substantive application-code edits. Binding agent instruction summary: [`../../AGENTS.md`](../../AGENTS.md).
 
@@ -40,7 +48,7 @@ Reviews approved FSPECs and ADRs, creates and assigns tasks, manages dependencie
 Workers implement, test and document assigned tasks in isolated Git worktrees/branches. They must not alter approved governance documents or merge into the integration branch. Each handoff identifies task, branch/commit, changed files, tests and known issues. Binding agent instruction summary: [`../../AGENTS.md`](../../AGENTS.md).
 
 ## 6. Parallelization
-Project-wide maximum is the value configured in [`../../config/agent-policy.yaml`](../../config/agent-policy.yaml) (single source of truth); simultaneous implementation Workers, excluding the Coordinator, may not exceed it. This is a ceiling, not a target. Coordinator must inspect task dependencies, overlapping files, shared interfaces and predicted merge cost. Run in parallel only if changes are clearly separable and integration is expected to be straightforward; otherwise run sequentially or repartition. Document the reasoning. Subagent sessions do not guarantee worktree isolation. Technical enforcement status is tracked in [`multi-agent-orchestration.md`](multi-agent-orchestration.md) §7.
+Project-wide maximum is the value configured in [`../../config/agent-policy.yaml`](../../config/agent-policy.yaml) (single source of truth); simultaneous implementation Workers, excluding the Coordinator, may not exceed it. This is a ceiling, not a target. OpenCode does not natively cap how many `worker` sessions may run. Coordinator must inspect task dependencies, overlapping files, shared interfaces and predicted merge cost. Run in parallel only if changes are clearly separable and integration is expected to be straightforward; otherwise run sequentially or repartition. Document the reasoning. Subagent sessions do not guarantee worktree isolation; use OpenCode `worktree_create` and `session_move`. Technical enforcement status is tracked in [`multi-agent-orchestration.md`](multi-agent-orchestration.md) §7.
 
 ## 7. Task workflow
 The concrete workflow chain of the active project is documented in its project description, §9: [`../../project/project.md`](../../project/project.md).
@@ -63,7 +71,7 @@ Classify errors as (a) correctable within approved scope, (b) integration confli
 Automatically capture, where available: task ID, agent/role, actual model identifier, task status, integrated commits, test outcomes, failure reasons. Optionally capture agent calls, session IDs, timestamps, duration, tokens and costs when inexpensive. Missing optional data is noted, never invented, and must not block completion. Maintain a detailed execution log separately from the concise implementation report. If a task uses multiple runs/models, preserve each run.
 
 ## 10. Tool independence
-Functional Specifications do not contain model assignments. Model-to-role mapping and provider endpoint belong in runtime configuration. OpenCode is the current platform choice; the orchestration mechanism, concurrency enforcement, worktree lifecycle and logging extraction are verified in [`multi-agent-orchestration.md`](multi-agent-orchestration.md) §7. Any architecture decision must be approved through ADR lifecycle.
+Functional Specifications do not contain model assignments. Model-to-role mapping and provider endpoint belong in runtime configuration (OpenCode config and the host environment). OpenCode is the current platform choice; the orchestration mechanism, concurrency enforcement, worktree lifecycle and logging extraction are verified in [`multi-agent-orchestration.md`](multi-agent-orchestration.md) §7. Any architecture decision must be approved through ADR lifecycle.
 
 ## 11. Traceability
 Traceability edges (REQ → FSPEC → TASK → evidence) live in the frontmatter of the lower-level document, which is the single source of truth. The templates carry the field layout only; this section defines how the fields are structured and used.
@@ -71,8 +79,8 @@ Traceability edges (REQ → FSPEC → TASK → evidence) live in the frontmatter
 **Field placement:**
 - REQ (`docs/templates/requirement.md`): `implemented_in.functional_specs` / `implemented_in.adrs` — optional mirror pointing at the documents that realize the requirement. Primary truth stays in the FSPEC; the mirror may lag and is never the basis for decisions.
 - FSPEC (`docs/templates/functional-specification.md`): `references.requirements` / `references.adrs` name the upstream documents; each acceptance criterion carries a `traces:` block with `requirement` (REQ it realizes) and `verification` (test/evidence references, filled once integrated).
-- TASK (`docs/templates/task.md`): `references.functional_spec.acceptance_criteria` lists the AC IDs the task covers — this is the primary task-side trace edge.
-- Task plan (`docs/templates/tasks-for-fspec.md`): the per-task `Acceptance criteria` line mirrors the same edge for fast plan-level reading.
+- TASK (`docs/templates/task.md`): layout only. `id` follows the numbering convention in `docs/templates/tasks-for-fspec.md`. `status` is the task state (§7), not FSPEC implementation status (§3). `references.functional_spec.acceptance_criteria` lists the AC IDs the task covers — this is the primary task-side trace edge. `repository` is `null` when the work is in this repository; otherwise it names the separate code repository. `result_commit` is filled on integration: a commit SHA in this repository, or `repo@sha` when `repository` is set.
+- Task plan (`docs/templates/tasks-for-fspec.md`): FSPEC implementation status and start authorization live here (§3). The per-task `Acceptance criteria` line mirrors the TASK trace edge for fast plan-level reading. Task IDs are assigned only by this file's numbering convention.
 
 **Usage rules:**
 - A task without an AC reference is a warning the Coordinator must resolve before review; an AC without any covering TASK is visible in the task plan as a gap.
@@ -88,23 +96,32 @@ The following directory structure is binding for all artefacts of this process:
 ```text
 <repo>/
 ├── AGENTS.md
+├── README.md
 ├── config/
 │   └── agent-policy.yaml
+├── .opencode/
+│   ├── opencode.jsonc       # OpenCode V2 project config
+│   ├── agents/              # coordinator (primary), worker (subagent)
+│   ├── skills/              # start-fspec, delegate-task, integrate-task, implementation-report
+│   └── commands/            # /start-fspec, /delegate-task, /integrate-task, /implementation-report
 ├── docs/
 │   ├── process/             # Governance documents (PROC-0001, PROC-0002, …)
 │   ├── templates/           # Templates for REQ, FSPEC, ADR, TASK, IMP, …
 │   ├── requirements/        # Approved requirements (REQ-…)
 │   ├── functional_specs/    # Approved functional specifications (FSPEC-…)
-│   ├── adr/                  # Architecture decision records (ADR-…)
+│   ├── adr/                 # Architecture decision records (ADR-…)
+│   ├── tasks/               # FSPEC task plans and TASK-… files
 │   ├── implementation/      # Implementation reports (IMP-FSPEC-…)
-│   ├── poc/
-│   │   └── evidence/        # Evidence for orchestration PoC checks (CHECK-…)
-│   ├── hardware/            # Hardware documentation
-│   └── external/            # External artefacts (data sheets, …)
+│   ├── execution/           # Execution logs (not a governance document)
+│   └── poc/
+│       └── evidence/        # Evidence for orchestration PoC checks (CHECK-…)
 └── project/
-    ├── project.md
+    ├── project.md           # Active project overview (German)
+    ├── project-example.md   # Labelled example only; not normative
     └── todo-register.md
 ```
+
+Optional, not binding: `docs/hardware/`, `docs/external/`, and `vendor/` (Git-ignored reference clones). Create them when the project needs them.
 
 ### Placement rules
 - Governance documents are stored in `docs/process/`.
@@ -112,10 +129,20 @@ The following directory structure is binding for all artefacts of this process:
 - Approved requirements are stored in `docs/requirements/`.
 - Approved functional specifications are stored in `docs/functional_specs/`.
 - Architecture decision records are stored in `docs/adr/`.
+- FSPEC task plans (`FSPEC-….md`) and individual tasks (`TASK-….md`) are stored in `docs/tasks/`.
 - Implementation reports are stored in `docs/implementation/`.
+- Execution logs are stored in `docs/execution/`.
 - PoC evidence is stored in `docs/poc/evidence/`.
-- Hardware documentation is stored in `docs/hardware/`.
-- External artefacts (e.g. data sheets) are stored in `docs/external/`.
+- OpenCode agents, skills, commands and project config are stored in `.opencode/`.
+- Hardware documentation, when used, is stored in `docs/hardware/`.
+- External artefacts (e.g. data sheets), when used, are stored in `docs/external/` and are referenced from the governing requirement, functional specification or ADR.
 
-### External artefacts
-External files such as data sheets are placed in `docs/external/` and are referenced from the governing requirement, functional specification or ADR.
+## 13. Approval and history
+
+Approver: pending (1.1.0 awaits human re-approval)  
+Approved version/date: 1.0.0 / 2026-10-24 (superseded)
+
+| Version | Date | Change |
+|---|---|---|
+| 1.0.0 | 2026-10-24 | Approved by human instruction. |
+| 1.1.0 | 2026-10-29 | Directory structure: `.opencode/`, `docs/tasks/`, `docs/execution/`; hardware/external optional; OpenCode worktrees; native concurrency cap documented as absent; project overview language is German; TASK field semantics (`repository`, `result_commit`, status vs implementation status) in §11. |

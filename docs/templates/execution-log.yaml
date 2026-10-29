@@ -1,4 +1,5 @@
 # Optional structured execution record; automatic extraction to be verified.
+# Store filled logs in docs/execution/ (see PROC-0001 §12).
 task_id: TASK-XXXX
 runs:
   - run_id: RUN-XXXX

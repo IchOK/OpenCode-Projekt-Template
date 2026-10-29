@@ -1,14 +1,16 @@
 ---
 id: PROC-0002
 title: "Multi-Agent Orchestration"
-status: Approved
-version: 1.0.0
-date: 2026-10-24
-approved_by: "Projektverantwortlicher (human instruction, 2026-10-24)"
-approved_at: 2026-10-24
+status: Draft
+version: 1.1.0
+date: 2026-10-29
+approved_by: null
+approved_at: null
 ---
 
 # Multi-Agent Orchestration
+
+Version 1.1.0 supersedes 1.0.0 (approved 2026-10-24) and awaits human re-approval.
 
 ## 1. Scope and applicability
 
@@ -18,8 +20,8 @@ approved_at: 2026-10-24
   human-approved FSPECs.
 - No custom orchestration service is built unless §8 determines native means
   demonstrably insufficient.
-- The runtime model (e.g. a Qwen Flash Next endpoint) is a runtime choice and
-  never part of this rule set (§9).
+- The runtime model is a runtime choice and never part of this rule set (§9).
+  Do not pin a model ID in agent files or FSPECs.
 
 ## 2. Roles and authorization
 
@@ -27,9 +29,12 @@ approved_at: 2026-10-24
   tests and maintains documentation. Never implements or corrects production
   application code. Runs the §7 verification (PoC) in a disposable repository;
   scripts written solely for tool verification do not count as production code.
+  Speaks with the human in German. Writes the project overview
+  (`project/project.md` and `docs/templates/project.md`) in German; writes all
+  other documents in English ([`../../AGENTS.md`](../../AGENTS.md) Language).
 - **Workers**: implement, test and document assigned tasks only, each in an
   isolated Git worktree. Never merge into the integration branch; never modify
-  approved governance documents.
+  approved governance documents. Return handoffs in English.
 - Binding agent instruction summary: [`../../AGENTS.md`](../../AGENTS.md).
 - Implementation starts only on an explicit human start instruction naming the
   FSPEC ID and version. Approval, `Ready to Start`, an available task or the
@@ -48,12 +53,18 @@ source of truth. Enforcement status of each rule is tracked in §7.
 - Maximum concurrent implementation Workers, as maintained centrally in
   [`../../config/agent-policy.yaml`](../../config/agent-policy.yaml) (single source
   of truth); the Coordinator is not counted. This is a ceiling, not a target.
+  OpenCode has no native counter for concurrent sessions of the same subagent.
 - Each Worker requires its own isolated Git worktree/branch before any edit;
-  native Subagent sessions alone do not establish filesystem isolation.
+  native Subagent sessions alone do not establish filesystem isolation. Use
+  OpenCode `worktree_create` and `session_move` (configured parent directory:
+  `.worktrees`).
 - Default maximum of correction attempts per issue, as maintained centrally in
   [`../../config/agent-policy.yaml`](../../config/agent-policy.yaml); any increase
   needs explicit human approval, recorded with rationale and new limit.
+  OpenCode has no native retry counter.
 - Integration requires passing tests, documentation and spec compliance.
+- Shell can bypass `edit` permission rules. Coordinator shell is therefore
+  `ask` by default; do not treat edit allowlists as a guarantee.
 
 ## 4. Parallelization
 
@@ -88,6 +99,8 @@ Full rules in [`document-lifecycle.md`](document-lifecycle.md) §7–§8; execut
   report (templates:
   [`execution-log.yaml`](../templates/execution-log.yaml),
   [`implementation.md`](../templates/implementation.md)).
+- Store filled execution logs in `docs/execution/` and reports in
+  `docs/implementation/`.
 - If a task uses multiple runs or models, preserve each run.
 
 ## 7. Verification of the orchestration (PoC)
@@ -97,34 +110,47 @@ installed OpenCode version. Until each check below shows evidence, the affected
 rule is **stated intent, not enforced fact**, and must be treated as such in
 task plans and reports.
 
+OpenCode V2 wiring in this template (`.opencode/opencode.jsonc`, agent files,
+skills, commands, worktree directory) makes several checks **ready to verify**.
+It does not make them passed. A human can still select a non-disabled agent in
+the UI.
+
 ### 7.1 Preconditions
 
-- OpenCode runs on the Mac; the DGX Spark exposes the vLLM OpenAI-compatible
-  endpoint.
-- Confirm the actual model ID from `/v1/models`; do not assume the repository's
-  example ID. Verify OpenCode configuration syntax against the installed version.
-- Tests run in a disposable Git repository; no real robot movement and no
+- OpenCode V2 is installed and can open this repository.
+- A model provider is configured locally. Confirm the actual model ID from the
+  provider (for example `/v1/models` on an OpenAI-compatible endpoint); do not
+  assume an example ID from this repository. Agent files in this template do
+  not pin a model.
+- Verify OpenCode configuration syntax against the installed version
+  (`.opencode/opencode.jsonc`).
+- Tests run in a disposable Git repository; no production side effects and no
   safety-critical operation at any point.
 
 ### 7.2 Verification checks
 
-Evidence location: `docs/poc/evidence/` (create when runs begin) — governed by the binding directory structure in [`document-lifecycle.md`](document-lifecycle.md) §12. Status
-values: `Planned`, `Passed`, `Failed`, `Not applicable`.
+Evidence location: `docs/poc/evidence/` (create when runs begin) — governed by
+the binding directory structure in [`document-lifecycle.md`](document-lifecycle.md) §12.
+Status values: `Planned`, `Passed`, `Failed`, `Not applicable`.
 
-| ID | Check | Normative ref | Status | Evidence |
-|---|---|---|---|---|
-| CHECK-01 | Coordinator loads as default Primary Agent and can delegate to a Worker | §2 | Planned | — |
-| CHECK-02 | One Worker implements a trivial FSPEC task; model and result captured | §2, §6 | Planned | — |
-| CHECK-03 | Separate Git worktree/branch per Worker; verify no shared working directory | §3 | Planned | — |
-| CHECK-04 | The configured maximum of tasks on separate modules execute in parallel and merge cleanly | §3, §4 | Planned | — |
-| CHECK-05 | Task beyond the configured maximum is rejected: technical enforcement, not prompt obedience | §3 | Planned | — |
-| CHECK-06 | Overlapping-file tasks are scheduled sequentially by the Coordinator | §4 | Planned | — |
-| CHECK-07 | Injected failure: correction hypothesis, retry evidence, cap at configured default | §5 | Planned | — |
-| CHECK-08 | Limit increase requires explicit human approval | §2, §3 | Planned | — |
-| CHECK-09 | `Ready to Start` does not launch implementation without explicit human command | §2 | Planned | — |
-| CHECK-10 | No automatic transition to a second FSPEC | §2 | Planned | — |
-| CHECK-11 | Sessions, model IDs, timestamps, token usage, commits and tests available for automatic logs | §6, §7.1 | Planned | — |
-| CHECK-12 | Integration tests run and an implementation report is created | §3, §6 | Planned | — |
+Enforcement: `config` = OpenCode setting or permission present, unverified;
+`policy` = prompt / skill / `agent-policy.yaml` only; `none` = OpenCode cannot
+enforce this.
+
+| ID | Check | Normative ref | Enforcement | Status | Evidence |
+|---|---|---|---|---|---|
+| CHECK-01 | Coordinator loads as default Primary Agent (`default_agent`) and can delegate to a Worker | §2 | config | Planned | — |
+| CHECK-02 | One Worker implements a trivial FSPEC task; model and result captured | §2, §6 | policy | Planned | — |
+| CHECK-03 | Separate Git worktree per Worker via `worktree_create` / `session_move`; no shared working directory | §3 | config | Planned | — |
+| CHECK-04 | Up to `workers.max_parallel` tasks on separate modules execute in parallel and merge cleanly | §3, §4 | policy | Planned | — |
+| CHECK-05 | A further Worker beyond `workers.max_parallel` is rejected by a native cap | §3 | none | Not applicable | OpenCode does not cap concurrent sessions of the same subagent. Coordinator must refuse from `agent-policy.yaml`. |
+| CHECK-06 | Overlapping-file tasks are scheduled sequentially by the Coordinator | §4 | policy | Planned | — |
+| CHECK-07 | Injected failure: correction hypothesis, retry evidence, cap at configured default | §5 | policy | Planned | — |
+| CHECK-08 | Limit increase requires explicit human approval | §2, §3 | policy | Planned | — |
+| CHECK-09 | `Ready to Start` does not launch implementation without explicit human command (`/start-fspec`) | §2 | policy | Planned | — |
+| CHECK-10 | No automatic transition to a second FSPEC | §2 | policy | Planned | — |
+| CHECK-11 | Sessions, model IDs, timestamps, token usage, commits and tests available for automatic logs | §6, §7.1 | config | Planned | — |
+| CHECK-12 | Integration tests run and an implementation report is created | §3, §6 | policy | Planned | — |
 
 ### 7.3 Exit criteria
 
@@ -144,8 +170,9 @@ When a check fails, escalate in this order and document the decision:
 4. Dedicated orchestration service — last resort; needs a new ADR through the
    approval cycle of [`document-lifecycle.md`](document-lifecycle.md) §1.
 
-The superseded decision record ADR-0001 remains as historical rationale; it is
-not edited.
+CHECK-05 is already `Not applicable` at the native layer: do not treat prompt
+obedience as a substitute for a cap. If a hard cap becomes required, escalate
+from step 2.
 
 ## 9. Tool independence
 
@@ -157,10 +184,11 @@ not edited.
 
 ## 10. Approval and history
 
-Approver: Projektverantwortlicher (explicit human instruction, 2026-10-24)
-Approved version/date: 1.0.0 / 2026-10-24
+Approver: pending (1.1.0 awaits human re-approval)  
+Approved version/date: 1.0.0 / 2026-10-24 (superseded)
 
 | Version | Date | Change |
 |---|---|---|
 | 0.1.0 | 2026-10-24 | Initial draft: consolidates ADR decision content and the PoC verification plan of the originating project. Original documents retained unchanged as historical records. |
 | 1.0.0 | 2026-10-24 | Approved by human instruction; content unchanged from draft. |
+| 1.1.0 | 2026-10-29 | Generic template: remove originating-project runtime assumptions; document OpenCode V2 wiring and native enforcement limits; Coordinator writes the project overview in German and other documents in English. |

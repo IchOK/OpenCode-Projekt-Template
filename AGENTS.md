@@ -1,17 +1,23 @@
 # Agent Instructions
 
+## Language
+- The Coordinator (primary agent) communicates with the human in German.
+- **Project overview is German.** Write and keep `project/project.md`, `docs/templates/project.md`, and `project/project-example.md` in German (headings, body, table headers). YAML field names and status tokens (`Draft`, `Approved`, …) stay English; they are process identifiers. Follow `docs/templates/project.md`. Do not rewrite these files into English.
+- Workers return structured handoffs in English.
+- All other project documents (requirements, functional specifications, ADRs, tasks, implementation reports, execution logs) are written in English.
+
 ## Required project context
 Before planning, creating requirements, proposing architecture, delegating tasks, or changing code, read in this order:
-1. `./project/project.md` — project purpose, scope, current hardware/software direction and open questions. Template: `docs/templates/project.md`.
+1. `./project/project.md` — project purpose, scope, current direction and open questions (German). Template: `docs/templates/project.md`.
 2. `docs/process/document-lifecycle.md` — document governance and authorization rules.
 3. `docs/process/multi-agent-orchestration.md` — execution rules: roles, worker limits, worktree isolation and verification status of enforcement.
-4. Relevant approved Requirements, Functional Specifications and ADRs, including their exact versions.
+4. `config/agent-policy.yaml` — concrete concurrency and retry limit values (single source of truth for numbers; OpenCode does not enforce them).
+5. Relevant approved Requirements, Functional Specifications and ADRs, including their exact versions.
 
-Treat the project overview as **context, not implementation authorization or an approved specification**. It is currently a draft. If it conflicts with an approved Requirement, FSPEC or ADR, follow the approved artifact and flag the discrepancy. Never convert a project goal or milestone directly into an implementation task without an approved FSPEC and explicit human start instruction.
-
+Treat the project overview as **context, not implementation authorization or an approved specification**. Read its `status` field; do not assume it is approved. If it conflicts with an approved Requirement, FSPEC or ADR, follow the approved artifact and flag the discrepancy. Never convert a project goal or milestone directly into an implementation task without an approved FSPEC and explicit human start instruction.
 
 ## External code (vendor/)
-- `vendor/` contains external reference repositories (e.g. `vendor/ESP_Framework`) cloned from GitHub. They are not project content, are Git-ignored and must not be modified.
+- `vendor/` contains optional external reference repositories cloned into the workspace. They are not project content, are Git-ignored and must not be modified.
 - Reading, searching, indexing or summarizing anything under `vendor/` requires an **explicit human instruction** naming the directory or repository. Without it, agents must not read vendor contents for context, planning or implementation decisions.
 - When reading is authorized, treat vendor code strictly as read-only external reference material; it never substitutes for an approved Requirement, FSPEC or ADR.
 
@@ -25,10 +31,10 @@ Treat the project overview as **context, not implementation authorization or an 
 - Do not change approved Requirements, FSPECs or ADRs without the applicable human approval process.
 
 ## Roles
-- Coordinator: plan, assign, review, integrate, arrange integration tests, maintain documentation. Must not implement or correct production application code.
-- Worker: implement assigned tasks, test, document outcomes, work only within assigned scope. Must not merge own changes into the integration branch or modify approved governance documents.
-- Worker concurrency: at most the maximum configured in `config/agent-policy.yaml` (single source of truth); the coordinator is not counted.
-- Each worker must have an isolated Git worktree before editing code. Native OpenCode subagent sessions alone do not establish filesystem isolation.
+- Coordinator: plan, assign, review, integrate, arrange integration tests, maintain documentation. Must not implement or correct production application code. Speak with the human in German. Write the project overview in German and all other documents in English (see Language above).
+- Worker: implement assigned tasks, test, document outcomes, work only within assigned scope. Must not merge own changes into the integration branch or modify approved governance documents. Return handoffs in English.
+- Worker concurrency: at most the maximum configured in `config/agent-policy.yaml` (single source of truth); the coordinator is not counted. These numbers are policy, not a native OpenCode cap.
+- Each worker must have an isolated Git worktree before editing code. Create it with OpenCode `worktree_create` and move the worker session with `session_move`. Native subagent sessions alone do not establish filesystem isolation.
 - Parallelize only tasks with clearly separable changes and low predicted merge effort. Otherwise execute sequentially or repartition.
 - Coordinator must document why tasks are parallelized.
 - Normative sources for roles, authorization and parallelization: [`docs/process/multi-agent-orchestration.md`](docs/process/multi-agent-orchestration.md) §2–§4 and [`docs/process/document-lifecycle.md`](docs/process/document-lifecycle.md) §4–§5; the rules above are the binding agent-facing summary.
