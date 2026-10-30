@@ -211,10 +211,7 @@ Optional, not binding: `docs/hardware/`, `docs/external/`, and `vendor/` (Git-ig
 
 ## 13. Approval and history
 
-Approver: pending (1.1.0 awaits human re-approval)  
-Approved version/date: 1.0.0 / 2026-10-24 (superseded)
-
 | Version | Date | Change |
 |---|---|---|
 | 1.0.0 | 2026-10-24 | Approved by human instruction. |
-| 1.1.0 | 2026-10-29 | Directory structure: `.opencode/`, `docs/tasks/`, `docs/execution/`; hardware/external optional; OpenCode worktrees; native concurrency cap documented as absent; project overview language is German; TASK field semantics in §11; process docs are Coordinator on-demand reads; §4–§5 defer role definition to PROC-0002 §2; define governed-document review states and transitions. |
+| 1.1.0 | 2026-10-30 | Directory structure: `.opencode/`, `docs/tasks/`, `docs/execution/`; hardware/external optional; OpenCode worktrees; native concurrency cap documented as absent; project overview language is German; TASK field semantics in §11; process docs are Coordinator on-demand reads; §4–§5 defer role definition to PROC-0002 §2; define governed-document review states and transitions. |

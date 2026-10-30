@@ -1,0 +1,21 @@
+{
+    "@context": [
+      "http://www.w3.org/ns/odrl.jsonld",
+      "http://www.w3.org/ns/tdmrep.jsonld"
+    ],
+    "@type": "Offer",
+    "uid": "https://github.com/IchOK/.well-known/tdm-policy.json",
+    "profile": "http://www.w3.org/ns/tdmrep",
+    "permission": [
+      {
+        "action": "tdm:mine",
+        "constraint": [
+          {
+            "leftOperand": "purpose",
+            "operator": "eq",
+            "rightOperand": "tdm:research"
+          }
+        ]
+      }
+    ]
+  }

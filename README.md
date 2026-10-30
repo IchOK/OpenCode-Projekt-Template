@@ -12,7 +12,7 @@ This repository is a **template**, not an application. Copy it, then fill `proje
 | `project/project.md` | Placeholder / German overview to fill | **Your** live project context |
 | `docs/poc/`, `verifier` agent | Optional **template verification** tooling | Safe to **remove** if you do not run PoC checks |
 | Process docs `PROC-*` | Copy and later approve for **your** project | Becomes **your** governance once approved |
-| License files | [`LICENSE.md`](LICENSE.md), [`docs/legal/`](docs/legal/) | Keep or replace when you redistribute; update placeholders |
+| License file | [`LICENSE.md`](LICENSE.md) | Keep or replace when you redistribute; update placeholders |
 
 Implementation authority always comes from **your** approved FSPECs and explicit `/start-fspec` — not from copying the template.
 
@@ -28,7 +28,7 @@ If the derived repo is **only** for product work (no template PoC):
 
 | Path | Role |
 |---|---|
-| [`LICENSE.md`](LICENSE.md) | Summary: Apache-2.0 + [No-AI addendum](docs/legal/NO-AI-ADDENDUM.md) (code); CC BY 4.0 + EU TDM reservation (docs/text) |
+| [`LICENSE.md`](LICENSE.md) | Summary: Apache-2.0; CC BY 4.0 + EU TDM reservation (docs/text) |
 | [`robots.txt`](robots.txt) | Opt-out signals for known AI crawlers when served as a website |
 | [`.well-known/tdmrep.json`](.well-known/tdmrep.json) | [TDMRep](https://w3c.github.io/cg-reports/tdmrep/CG-FINAL-tdmrep-20240510/) reservation file (JSON **array**; update policy URL to your origin) |
 
@@ -90,7 +90,7 @@ verification plan.
    The Coordinator writes `docs/implementation/IMP-FSPEC-<ID>-v<version>.md` and updates the matching task plan `docs/tasks/FSPEC-<ID>-v<version>.md`, then **waits**.
    Completing one FSPEC does not start the next.
 
-Process rules: `docs/process/document-lifecycle.md` (PROC-0001) and `docs/process/multi-agent-orchestration.md` (PROC-0002). Those documents are at **1.1.0 Draft** until you re-approve them.
+Process rules: `docs/process/document-lifecycle.md` (PROC-0001) and `docs/process/multi-agent-orchestration.md` (PROC-0002).
 
 ## Directory map
 
@@ -100,7 +100,6 @@ LICENSE.md
 README.md
 robots.txt
 .well-known/tdmrep.json
-docs/legal/               LICENSE summary, No-AI addendum, TDM policy
 config/agent-policy.yaml
 .opencode/                 OpenCode V2 agents, skills, commands, config
 docs/process/              PROC-0001, PROC-0002

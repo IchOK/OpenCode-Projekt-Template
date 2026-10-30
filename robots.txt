@@ -1,5 +1,5 @@
 # Applies when this repository is served as a website at the domain root.
-# Git clone alone does not publish robots.txt. See LICENSE.md and docs/legal/README.md.
+# Git clone alone does not publish robots.txt. See LICENSE.md.
 
 # Standard-Suchmaschinen erlauben (für Menschen)
 User-agent: Googlebot

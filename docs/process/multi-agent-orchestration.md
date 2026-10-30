@@ -163,11 +163,8 @@ Full rules in [`document-lifecycle.md`](document-lifecycle.md) §7–§8; execut
 
 ## 8. Approval and history
 
-Approver: pending (1.1.0 awaits human re-approval)  
-Approved version/date: 1.0.0 / 2026-10-24 (superseded)
-
 | Version | Date | Change |
 |---|---|---|
 | 0.1.0 | 2026-10-24 | Initial draft: consolidates the role and orchestration rules of the originating project. Original documents retained unchanged as historical records. |
 | 1.0.0 | 2026-10-24 | Approved by human instruction; content unchanged from draft. |
-| 1.1.0 | 2026-10-29 | Generic template: remove originating-project runtime assumptions; document OpenCode V2 wiring and native enforcement limits; §2 splits roles, authorization and instruction sources; Worker produces a handoff, Coordinator owns the document pipeline. |
+| 1.1.0 | 2026-10-30 | Generic template: remove originating-project runtime assumptions; document OpenCode V2 wiring and native enforcement limits; §2 splits roles, authorization and instruction sources; Worker produces a handoff, Coordinator owns the document pipeline. |

@@ -4,7 +4,7 @@ Human-readable summary. This file does not replace the full text of the Apache L
 
 ## 1. QUELLCODE UND SOFTWARE / SOURCE CODE AND SOFTWARE
 
-Sämtlicher Quellcode und Softwarekomponenten in diesem Repository (einschließlich `.opencode/`, Konfigurationsskripte und vergleichbare Dateien) stehen unter der **Apache License, Version 2.0**, ergänzt um das **[No-AI-Addendum](docs/legal/NO-AI-ADDENDUM.md)**.
+Sämtlicher Quellcode und Softwarekomponenten in diesem Repository (einschließlich `.opencode/`, Konfigurationsskripte und vergleichbare Dateien) stehen unter der **Apache License, Version 2.0**.
 
 - **Ausschluss:** Nutzung zum Training, Fine-Tuning, Distillation oder Validieren von KI-/ML-Modellen, zum Aufbau kommerzieller RAG-Datenbanken oder als automatisierter Input für kommerzielle KI-Dienste ist **ohne vorherige schriftliche Zustimmung des Rechteinhabers untersagt**.
 - Offizieller Apache-2.0-Text: [https://www.apache.org/licenses/LICENSE-2.0](https://www.apache.org/licenses/LICENSE-2.0)
