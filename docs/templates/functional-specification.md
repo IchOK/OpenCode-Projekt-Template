@@ -18,15 +18,16 @@ references:
 # Interfaces and constraints
 
 # Acceptance criteria
-- [ ] AC-1: ...
+- AC-1: ...
   traces:
     requirement: REQ-XXXX
-    verification: []
 
 # Out of scope
 
-# Human approval
-Approver: pending  
-Approved version/date: pending
+# Human review
+- Decision: pending
+- Decided by/date: pending
+- Decision notes: pending
+- Approved version/date: pending
 
 > Approval does not authorize implementation. Implementation status is tracked on the task plan in `docs/tasks/`, not on this `status` field.

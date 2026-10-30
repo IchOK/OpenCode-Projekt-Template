@@ -4,11 +4,8 @@
   //   "agents": { "build": { "disabled": false } }
   // Using `build` bypasses this template's Coordinator workflow.
   "default_agent": "coordinator",
-  "instructions": [
-    "docs/process/document-lifecycle.md",
-    "docs/process/multi-agent-orchestration.md",
-    "config/agent-policy.yaml",
-  ],
+  // Process docs are not ambient. The Coordinator reads them on demand
+  // (coordinator.md + skills). Workers must not receive them in the prompt.
   "worktree": {
     "directory": ".worktrees",
   },
@@ -16,11 +13,12 @@
     { "action": "external_directory", "resource": "*", "effect": "ask" },
   ],
   "policies": [
-    // Hard-deny integration-branch mutation via worker-style git commands.
-    // Coordinator git push remains `ask` through agent permissions; a deny
-    // here would block the Coordinator as well, so push is not listed.
-    { "action": "tool.use", "resource": "shell:git push --force *", "effect": "deny" },
+    // Normal Coordinator pushes remain `ask`; common forced forms are hard-denied.
     { "action": "tool.use", "resource": "shell:git push -f *", "effect": "deny" },
+    { "action": "tool.use", "resource": "shell:git push * -f *", "effect": "deny" },
+    { "action": "tool.use", "resource": "shell:git push *--force*", "effect": "deny" },
+    { "action": "tool.use", "resource": "shell:git push +*", "effect": "deny" },
+    { "action": "tool.use", "resource": "shell:git push * +*", "effect": "deny" },
   ],
   "agents": {
     "build": {

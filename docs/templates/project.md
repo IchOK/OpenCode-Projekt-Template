@@ -22,7 +22,7 @@ review_required: []
 
 > **Sprache (verbindlich für Coordinator und Menschen):** Der gesamte Fließtext, alle Überschriften und Tabellenköpfe dieser Datei sind **Deutsch**. Das gilt auch für die aktive Übersicht [`../../project/project.md`](../../project/project.md) und das Beispiel [`../../project/project-example.md`](../../project/project-example.md). YAML-Feldnamen und Statuswerte (`Draft`, `Approved`, …) bleiben englisch — das sind Prozess-IDs, keine Fließtextsprache. Der Coordinator darf die Projektbeschreibung **nicht** ins Englische umschreiben.
 
-**Einordnung:** Dieses Dokument vermittelt Projektkontext und Entwicklungsziele. Es ersetzt keine freigegebenen Anforderungen (REQ), Funktionsspezifikationen (FSPEC) oder Architekturentscheidungen (ADR). Aussagen zu konkreten Bausteinen sind Planungsstand, keine unveränderlichen Regeln.
+**Einordnung:** Dieses Dokument vermittelt Projektkontext und Entwicklungsziele. Es ersetzt keine freigegebenen Anforderungen (REQ), Funktionsspezifikationen (FSPEC) oder Architekturentscheidungen (ADR). Aussagen zu konkreten Bausteinen sind Planungsstand, keine unveränderlichen Regeln. Dokumenttyp PROJECT — Frontmatter-Bedeutung: [`../process/document-lifecycle.md`](../process/document-lifecycle.md) §1.2 (`status`/`approved_*` gelten nur für die Projektübersicht, nicht für Implementierungsfreigabe).
 
 Anforderungen, Funktionsspezifikationen, ADRs, Tasks, Implementation Reports und Execution Logs werden auf **Englisch** verfasst. Nur die Projektbeschreibung ist Deutsch.
 
@@ -74,7 +74,7 @@ Liste offene Fäden, nach Art gruppiert wo hilfreich. Verweise auf das Todo-Regi
 
 - Versionskontrolle und Hosting-Ort.
 - Regelwerke: [`../process/document-lifecycle.md`](../process/document-lifecycle.md), [`../process/multi-agent-orchestration.md`](../process/multi-agent-orchestration.md).
-- Verbindliche Agentenanweisungen: [`../../AGENTS.md`](../../AGENTS.md).
+- Gemeinsame Agentenregeln: [`../../AGENTS.md`](../../AGENTS.md). Coordinator: [`.opencode/agents/coordinator.md`](../../.opencode/agents/coordinator.md).
 - Ablaufkette des aktiven Projekts: [`../../project/project.md`](../../project/project.md) §9.
 
 > **Hinweis Vorlage:** Dieses Dokument ist die Vorlage für ein neues Projekt; es beschreibt kein aktives Projekt. Die referenzierte Ablaufkette gehört zum aktiven Projekt.

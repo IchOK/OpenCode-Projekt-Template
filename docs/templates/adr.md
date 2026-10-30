@@ -1,9 +1,9 @@
 ---
 id: ADR-XXXX
 title: "Decision title"
-status: Draft
 version: 0.1.0
-date: YYYY-MM-DD
+status: Draft
+created_at: YYYY-MM-DD
 approved_by: null
 approved_at: null
 ---
@@ -18,6 +18,8 @@ approved_at: null
 
 # Verification / Open questions
 
-# Human approval
-Approver: pending  
-Approved version/date: pending
+# Human review
+- Decision: pending
+- Decided by/date: pending
+- Decision notes: pending
+- Approved version/date: pending

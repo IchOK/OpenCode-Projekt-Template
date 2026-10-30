@@ -1,0 +1,33 @@
+{
+    "tdm-reservation": 1,
+    "tdm-policy": {
+      "policy-id": "no-commercial-ai-training",
+      "description": "Commercial AI training, fine-tuning, RAG database creation and commercial text and data mining are strictly prohibited.",
+      "grant": [
+        {
+          "op": "tdm",
+          "purpose": "research",
+          "condition": "non-commercial"
+        },
+        {
+          "op": "read",
+          "purpose": "human-use",
+          "condition": "any"
+        }
+      ],
+      "prohibit": [
+        {
+          "op": "tdm",
+          "purpose": "commercial"
+        },
+        {
+          "op": "ai-training",
+          "purpose": "commercial"
+        },
+        {
+          "op": "rag-indexing",
+          "purpose": "commercial"
+        }
+      ]
+    }
+  }

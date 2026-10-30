@@ -121,8 +121,6 @@ immer über ADR/REQ/FSPEC — nie stillschweigend.
 **Beispiele (kurz):**
 - Unklare Bauteile: Variante des Funkmoduls noch bestätigen.
 - Machbarkeit: Zusammenspiel zweier Laufzeiten noch zu verifizieren.
-- Prozess: Werden parallele Worker und automatisches Logging technisch erzwungen
-  (→ [`docs/process/multi-agent-orchestration.md`](../docs/process/multi-agent-orchestration.md) §7).
 
 ## 9. Entwicklungs- und Dokumentationsprozess
 

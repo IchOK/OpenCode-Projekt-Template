@@ -10,16 +10,20 @@ Use this skill before any implementation edit. Workers must not share the Coordi
 ## Preconditions
 
 1. The FSPEC is `In Progress` with recorded human start authorization.
-2. Read `config/agent-policy.yaml` `workers.max_parallel`. Count worker sessions already running for this FSPEC. If the count would exceed the limit, or the count is unknown, run sequentially.
+2. Read `config/agent-policy.yaml` `workers.max_parallel`. Count every active or reserved implementation Worker session across the project, regardless of FSPEC. A session reserves a slot from the start of its bootstrap turn until it finishes or is cancelled. Start this delegation only if adding its reserved slot stays within the limit. If the project-wide count is unknown, do not start another Worker until all known active Workers finish.
 3. The task has a file scope, dependencies, and acceptance-criteria references. Overlapping-file tasks stay sequential.
 4. Parallelization reasoning is written in the task plan when more than one worker will run.
+5. The Coordinator checkout is on the FSPEC integration branch recorded in the task plan. Stop if the current branch, recorded branch or authorized FSPEC version does not match.
 
 ## Worktree and session
 
-1. Create a worktree with OpenCode `worktree_create`. Name it after the task ID (for example `TASK-0401`). Destination comes from `worktree.directory` in OpenCode config (`.worktrees` in this template).
-2. Launch the `worker` subagent only (`subagent` tool, agent ID `worker`).
-3. Move that child session into the worktree with `session_move` before it edits files. If `session_move` cannot target the child, put the worktree path in the worker prompt and instruct the worker to move itself; if it still cannot, stop and report the blocker.
-4. Native subagent context isolation is not filesystem isolation. Do not skip the worktree.
+1. Create a worktree from the recorded FSPEC integration branch with OpenCode `worktree_create`. Name it after the task ID (for example `TASK-0401`). Destination comes from `worktree.directory` in OpenCode config (`.worktrees` in this template).
+2. Launch the `worker` subagent in the foreground with a bootstrap-only prompt containing the task ID and target worktree path. Instruct it to use no tools, perform no implementation work and return only `READY_FOR_MOVE`.
+3. Capture the child `sessionID` after the bootstrap call completes. Stop if no child session ID is returned or the response reports any work.
+4. Move that child session into the worktree with `session_move`.
+5. At the next delivery boundary, continue the same child session by passing its `sessionID` to `subagent` with the complete Worker prompt below. This later call is the first call allowed to inspect or modify task files.
+6. Stop and report the blocker if the child cannot be moved or resumed. Do not fall back to implementation in the Coordinator checkout.
+7. Native subagent context isolation is not filesystem isolation. Do not skip the worktree.
 
 ## Worker prompt (English)
 

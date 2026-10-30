@@ -1,5 +1,6 @@
-# Optional structured execution record; automatic extraction to be verified.
-# Store filled logs in docs/execution/ (see PROC-0001 §12).
+# Coordinator-maintained execution record (see config/agent-policy.yaml logging.automatic).
+# Create or append on task integration from the Worker handoff and verified results.
+# Store under docs/execution/ (PROC-0001 §9, §12). Use null for unavailable telemetry; never invent values.
 task_id: TASK-XXXX
 runs:
   - run_id: RUN-XXXX

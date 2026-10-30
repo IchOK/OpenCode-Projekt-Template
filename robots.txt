@@ -1,0 +1,42 @@
+# Applies when this repository is served as a website at the domain root.
+# Git clone alone does not publish robots.txt. See LICENSE.md and docs/legal/README.md.
+
+# Standard-Suchmaschinen erlauben (für Menschen)
+User-agent: Googlebot
+User-agent: Bingbot
+Allow: /
+
+# Bekannte kommerzielle KI-Crawler und Scraper blockieren
+User-agent: GPTBot
+Disallow: /
+
+User-agent: ChatGPT-User
+Disallow: /
+
+User-agent: OAI-SearchBot
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: Anthropic-ai
+Disallow: /
+
+User-agent: ClaudeBot
+Disallow: /
+
+User-agent: Google-Extended
+Disallow: /
+
+User-agent: PerplexityBot
+Disallow: /
+
+User-agent: Bytespider
+Disallow: /
+
+User-agent: Applebot-Extended
+Disallow: /
+
+# Pauschaler Fallback für alle anderen unidentifizierten AI-Scraper
+User-agent: *
+Disallow: /

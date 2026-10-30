@@ -25,6 +25,7 @@ review_required: []
 **Einordnung:** Dieses Dokument vermittelt Projektkontext und Entwicklungsziele.
 Es ersetzt keine freigegebenen Anforderungen (REQ), Funktionsspezifikationen (FSPEC) oder Architekturentscheidungen (ADR).
 Aussagen zu konkreten Bausteinen sind Planungsstand, keine unveränderlichen Regeln.
+Typ PROJECT — `status` und optionale `approved_*`-Felder betreffen nur diese Übersicht ([`docs/process/document-lifecycle.md`](../docs/process/document-lifecycle.md) §1.2), nicht Code-Freigabe.
 
 Die Projektbeschreibung ist auf Deutsch. Alle übrigen Projektdokumente
 (REQ, FSPEC, ADR, Tasks, Reports, Logs) werden auf Englisch verfasst.

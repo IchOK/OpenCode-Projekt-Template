@@ -6,9 +6,6 @@ status: Draft
 created_at: YYYY-MM-DD
 approved_by: null
 approved_at: null
-implemented_in:
-  functional_specs: []
-  adrs: []
 ---
 
 # Motivation
@@ -19,6 +16,8 @@ implemented_in:
 
 # Verification
 
-# Human approval
-Approver: pending  
-Approved version/date: pending
+# Human review
+- Decision: pending
+- Decided by/date: pending
+- Decision notes: pending
+- Approved version/date: pending

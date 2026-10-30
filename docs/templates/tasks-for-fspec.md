@@ -2,12 +2,14 @@
 
 Implementation status: Not Started
 Start authorization: none
+Integration base branch: `<config/agent-policy.yaml integration.base_branch>`
+FSPEC integration branch: `fspec/FSPEC-XXXX-v1.0.0`
 
 > Keep each task uniquely identified. The coordinator owns this plan. No human task-level approval is required, but an explicit human start authorization is mandatory before code changes.
 
 > Status semantics: Task status (Open, In Progress, …) and FSPEC implementation status (Not Started, Ready to Start, …) are separate dimensions; they are not to be conflated.
 
-Store this plan at `docs/tasks/FSPEC-XXXX.md` and individual tasks at `docs/tasks/TASK-*.md`.
+Store this plan at `docs/tasks/FSPEC-XXXX-v<version>.md` (for example `docs/tasks/FSPEC-0004-v1.0.0.md`) — **one file per authorized FSPEC version**, not per ID alone. Store individual tasks at `docs/tasks/TASK-*.md`.
 
 ## Numbering convention
 
