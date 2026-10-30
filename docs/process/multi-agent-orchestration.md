@@ -1,11 +1,11 @@
 ---
 id: PROC-0002
 title: "Multi-Agent Orchestration"
-status: Draft
+status: Approved
 version: 1.1.0
 created_at: 2026-10-29
-approved_by: null
-approved_at: null
+approved_by: JCA
+approved_at: 2026-10-30
 ---
 
 # Multi-Agent Orchestration
