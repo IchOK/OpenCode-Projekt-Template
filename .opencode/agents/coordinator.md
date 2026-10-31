@@ -18,6 +18,9 @@ permissions:
   - { action: edit, resource: "AGENTS.md", effect: ask }
   - { action: subagent, resource: "*", effect: deny }
   - { action: subagent, resource: "worker", effect: allow }
+  - { action: skill, resource: "verifier-fetch", effect: deny }
+  - { action: skill, resource: "verifier-check", effect: deny }
+  - { action: skill, resource: "verifier-run", effect: deny }
   - { action: shell, resource: "*", effect: ask }
   - { action: shell, resource: "git status *", effect: allow }
   - { action: shell, resource: "git diff *", effect: allow }

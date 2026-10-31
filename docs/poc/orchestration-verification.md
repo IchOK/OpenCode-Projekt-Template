@@ -7,14 +7,14 @@ the template's agents, configuration, skills and commands behave as intended.
 It does not define Coordinator or Worker duties and is not implementation
 authorization.
 
-The human starts verification in the local repository, selects the
-`verifier` Primary Agent, and names the checks to execute. The Verifier is
-already running inside that OpenCode session. It updates the repository,
-discarding local changes, then drives fresh Coordinator sessions with
-`opencode run` in the same directory (§2). It sends the tested Coordinator
-the same inputs a real project user would send. The procedure does not depend
-on whether the Verifier session was opened from the website or from the HTTP
-API, and it does not call that API.
+The human starts verification in the local repository and selects the
+`verifier` Primary Agent, or invokes one of its three commands. The Verifier
+is already running inside that OpenCode session. `/verifier-fetch` only
+updates the repository. `/verifier-check` runs one id and does not update the
+repository. `/verifier-run` updates the repository and then drives the CHECKs
+(§2). It sends the tested Coordinator the same inputs a real project user
+would send. The procedure does not depend on whether the Verifier session was
+opened from the website or from the HTTP API, and it does not call that API.
 The plan is not an ambient instruction for Coordinator or Worker sessions.
 "Führe alle Tests aus" means every CHECK in §6, in numeric order. The Not
 applicable list is not part of that run. There is no separate unit-test
@@ -44,40 +44,48 @@ with a source. Partial Then satisfaction is **Failed**.
 
 ## 2. Execution model
 
-1. The human selects the `verifier` agent and names the CHECK ids, or asks
-   for every CHECK in §6. The session directory is the local repository. The
-   human does not supply a base URL, host, port, or password.
-2. The Verifier updates that repository and discards local changes, in this
-   order and with no other git writes: `git fetch origin`,
-   `git reset --hard origin/main`, `git clean -fd`, then
+The human invokes one command. The session directory is the local repository.
+The human does not supply a base URL, host, port, or password.
+
+| Command | Effect |
+|---|---|
+| `/verifier-fetch` | Update the repository, then stop. No CHECK and no NA entry. |
+| `/verifier-check <id>` | One §6 id. Do not update the repository. Do not run §7. |
+| `/verifier-run` | Update the repository, then every CHECK in §6. |
+
+1. `/verifier-fetch`, and the start of `/verifier-run`, update that repository
+   and discard local changes, in this order and with no other git writes:
+   `git fetch origin`, `git reset --hard origin/main`, `git clean -fd`, then
    `git worktree remove <path>` (no `--force`, no `-f`) for every worktree
    except the repository itself. Uncommitted changes, untracked files, and
    commits that are not on `origin/main` are discarded. Do not push. If a
    command fails, the run stops. Record `git rev-parse HEAD`.
-3. The Verifier runs `opencode --version` once and copies that string. It
+   `/verifier-fetch` ends with that report. `/verifier-check` skips this step.
+2. The Verifier runs `opencode --version` once and copies that string. It
    checks the §5 paths with the read tool. It creates and commits only the
    files that read cannot open. It does not use `ls`, `pwd`, `find`, or
    `git ls-files` for that check. A `permission.rejected` result is not a
-   reason to stop the run.
-4. For each When bullet it runs `opencode run --format json` once in this
+   reason to stop the run. `/verifier-fetch` does not run this step.
+3. For each When bullet it runs `opencode run --format json` once in this
    repository, without `--agent`, `--model`, a host, or a port. The message
    is only that German When sentence. A When bullet that tells the Verifier
    to read or list files has no `opencode run`. CHECK-03 reuses the session
    id from its first run for the later When sentences of that same check.
    Every other check gets one new run and is not started again. A run whose
    work leaves this repository is Failed; the run stops.
-5. It reads the printed JSON for the Coordinator transcript and child
+4. It reads the printed JSON for the Coordinator transcript and child
    sessions. It does not prompt a Worker session and it does not call the
    OpenCode HTTP API.
-6. Git measurements use `git -C <repo>` and only the subcommands allowed in
+5. Git measurements use `git -C <repo>` and only the subcommands allowed in
    `.opencode/agents/verifier.md`. Static files are read, not re-parsed with
    ad-hoc scripts.
-7. The Verifier writes the evidence file for a check before starting the next
-   one. A Passed CHECK is followed by the next CHECK in numeric order.
-   The first Failed check stops the run. Later checks are not started. It
-   never retries a check, and it describes the run as complete only when every
-   requested CHECK is Passed. Entries in the Not applicable list are recorded
-   as Not applicable and are not CHECKs in that sequence.
+6. The Verifier writes the evidence file for a check before starting the next
+   one. Under `/verifier-check` it stops after that single id. Under
+   `/verifier-run` a Passed CHECK is followed by the next CHECK in §6.
+   §7 entries are not run and have no evidence file. The first Failed check
+   stops the run. Later checks are not started. It never retries a check,
+   and it describes the run as complete only when every requested CHECK is
+   Passed.
 
 Worker behaviour is observed through the Coordinator transcript, child
 sessions, permission errors, git, and the worktree.
@@ -90,8 +98,9 @@ sessions, permission errors, git, and the worktree.
 - A model provider is already configured. Copy `model` from the
   `opencode run` JSON. Do not assume an example ID from this repository and
   do not switch the model.
-- The local repository is this session's directory. Checks run there after
-  the update in §2. There is no disposable copy.
+- The local repository is this session's directory. `/verifier-run` runs
+  checks there after the update in §2. `/verifier-check` uses the tree as it
+  is. There is no disposable copy.
 - Do not perform production or safety-critical operations.
 - CHECK-02 uses a new session. An agent stored on an existing session can
   mask `default_agent`.
@@ -104,8 +113,8 @@ Evidence directory: `docs/poc/evidence/`.
 
 For each executed CHECK, copy
 [`evidence/CHECK-RECORD.template.md`](evidence/CHECK-RECORD.template.md) to
-`docs/poc/evidence/CHECK-XX.md`. For each Not applicable entry, copy it to
-`docs/poc/evidence/NA-XX.md`. Fill measurements. Non-null numbers and IDs
+`docs/poc/evidence/CHECK-XX.md`. Do not write an evidence file for a §7
+entry. Fill measurements. Non-null numbers and IDs
 must be copied from `opencode --version`, the `opencode run` JSON, or git.
 Otherwise `null`. Leave `started_at` and `ended_at` null;
 quote raw `time.created` and `time.idle` numbers in the measurements table.
@@ -188,9 +197,8 @@ Do not reorder them.
 ## 7. Not applicable
 
 These entries are not executed and are not part of the CHECK sequence.
-When the human asks for every CHECK, record each entry as `Not applicable`
-before `CHECK-01`, with no Coordinator session. When the human names one
-`NA` id, record only that entry.
+`/verifier-check` and `/verifier-run` do not start them and do not write
+`docs/poc/evidence/NA-*.md`.
 
 | ID | Kind | Check | Enforcement | Status | Evidence file |
 |---|---|---|---|---|---|
@@ -410,12 +418,12 @@ the CHECK scenarios and is not a step between them.
 - **Given:** This OpenCode version has no native counter for concurrent `worker` sessions (PROC-0002 §3).
 - **When:** No native-cap trial.
 - **Then:** Status remains `Not applicable`. Do not mark Passed or Failed.
-- **Evidence:** `NA-01.md` — quote PROC-0002 §3 and OpenCode version string; pointer to CHECK-14.
+  Do not run this entry and do not write `NA-01.md`.
 
 ## 9. Exit criteria
 
 - Every requested CHECK has a `CHECK-XX.md` evidence file with verdict `Passed` or `Failed`.
-- Every requested Not applicable entry has an `NA-XX.md` evidence file with verdict `Not applicable`.
+- §7 entries have no evidence file.
 - Failed capabilities are listed with their affected normative rules.
 - The validation run does not silently change process rules, configuration or
   agent instructions.

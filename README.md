@@ -51,9 +51,9 @@ This is not legal advice. Have a lawyer review terms before relying on them in p
 | `.opencode/opencode.jsonc` | `default_agent`, worktrees, permissions. No process `instructions`. |
 | `.opencode/agents/coordinator.md` | Primary agent; tells the Coordinator to read PROC on demand |
 | `.opencode/agents/worker.md` | Implementation subagent; Coordinator skills denied |
-| `.opencode/agents/verifier.md` | Independently selected Primary Agent; updates the local repository, then drives OpenCode sessions there as a simulated user |
-| `.opencode/skills/` | Coordinator-only: governance (`submit-for-review`, `record-approval`, `record-rejection`, `revise-governed-doc`) and implementation (`start-fspec`, `delegate-task`, `integrate-task`, `implementation-report`) |
-| `.opencode/commands/` | `/submit-for-review`, `/record-approval`, `/record-rejection`, `/revise-governed-doc`, `/start-fspec`, `/delegate-task`, `/integrate-task`, `/implementation-report` |
+| `.opencode/agents/verifier.md` | Independently selected Primary Agent with three commands: fetch, one check, or fetch plus every check |
+| `.opencode/skills/` | Coordinator-only: governance (`submit-for-review`, `record-approval`, `record-rejection`, `revise-governed-doc`) and implementation (`start-fspec`, `delegate-task`, `integrate-task`, `implementation-report`). Verifier-only: `verifier-fetch`, `verifier-check`, `verifier-run` |
+| `.opencode/commands/` | `/submit-for-review`, `/record-approval`, `/record-rejection`, `/revise-governed-doc`, `/start-fspec`, `/delegate-task`, `/integrate-task`, `/implementation-report`, `/verifier-fetch`, `/verifier-check`, `/verifier-run` |
 | `config/agent-policy.yaml` | Limit **values**; Coordinator reads the file; not injected into the Worker |
 
 The built-in `build` agent is **disabled** in project config so sessions start as the Coordinator. Re-enable it only if you accept bypassing this workflow:
@@ -71,11 +71,13 @@ OpenCode **cannot** natively cap how many `worker` sessions run at once, count r
 ## Independent template verification
 
 Template verification is separate from project work. Select the `verifier`
-Primary Agent in the local repository and name the checks to run. Numbered
-checks run in ID order. Not applicable entries are a separate list and are
-not part of that sequence. The Verifier updates that repository and discards
-local changes, then drives fresh Coordinator sessions with `opencode run`
-in the same directory. It
+Primary Agent in the local repository and use one command.
+`/verifier-fetch` updates the repository and stops. `/verifier-check`
+runs one numbered check and does not update the repository.
+`/verifier-run` updates the repository and then runs the numbered checks
+in ID order. Not applicable entries are a separate list and are not run.
+The Verifier drives fresh Coordinator sessions with `opencode run` in the
+same directory. It
 interacts with the Coordinator as a simulated project user. The same
 procedure applies whether the Verifier session was opened from the website
 or from the HTTP API. Coordinator and Worker instructions do not load the
