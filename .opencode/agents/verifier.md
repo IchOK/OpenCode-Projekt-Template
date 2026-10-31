@@ -89,16 +89,22 @@ and its output. Do not clone.
    `git ls-files` for this inventory. Create each missing file with the edit
    tool, then commit them once with the allowed `git add` and `git commit`
    commands. Do not edit them again during checks.
-3. For each check, run `opencode run --format json` in this repository. Do not
-   pass `--agent`, `--model`, a host, or a port, so `default_agent` applies.
-   The message is the When sentence from the plan, unchanged. One run per
-   When bullet. CHECK-13 reuses the session id printed by its first run for
-   the later When sentences of that check. Every other check gets a new run.
+3. Run the requested checks one after another in §5 order. When the human
+   names one check ID, run only that check. For each check, run
+   `opencode run --format json` in this repository. Do not pass `--agent`,
+   `--model`, a host, or a port, so `default_agent` applies. The message is
+   only the German When sentence from the plan, with no text before or after
+   it. Do not mention a check ID, `default_agent`, or this plan in that
+   message. One run per When bullet. CHECK-13 reuses the session id printed
+   by its first run for the later When sentences of that same check. Every
+   other check gets a new run.
 4. Read the run's JSON for the Coordinator transcript, child sessions, model
-   id, and token counts. Do not prompt a Worker session.
+   id, and token counts. Do not prompt a Worker session. Write that check's
+   evidence file before starting the next check.
 
-Do not switch model after a failure. Do not send a second prompt that tells
-the Coordinator to call an internal tool.
+A check runs once. Do not start it again after a server restart, a rejected
+command, or a missing Then bullet. Do not switch model after a failure. Do
+not send a second prompt that tells the Coordinator to call an internal tool.
 
 ## What you may measure locally
 
@@ -111,14 +117,18 @@ Do not change remotes or edit agent, skill, command, config, or process files.
 
 ## Stop
 
-Stop the whole run when a Coordinator run or `git worktree list` shows a path
-outside this repository's `.worktrees/`. Record that check Failed. Do not
-delete that worktree and do not mark the check Passed.
-
 A check is Passed only when every Then bullet was observed. Copy session ids,
 model ids, token counts, cost, and timestamps from the `opencode run` JSON or
 from git. Leave a field `null` when that output has no such value. Do not
 convert epoch numbers into clock times.
 
-The closing report lists every requested check id and its status. Say the run
-is complete only when each of those ids is Passed, Failed, or Not applicable.
+When a check is Passed or Not applicable, start the next requested check.
+When any Then bullet is missing, or a Coordinator run or `git worktree list`
+shows a path outside this repository's `.worktrees/`, write that check as
+Failed and stop the run. Do not delete that worktree, do not mark the check
+Passed, and do not start a later check.
+
+The closing report lists each check that ran and its status, and names the
+check that stopped the run. Checks that were not started have no evidence
+file. Say the run is complete only when every requested check is Passed or
+Not applicable.

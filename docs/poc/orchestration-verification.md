@@ -58,20 +58,23 @@ with a source. Partial Then satisfaction is **Failed**.
    files that read cannot open. It does not use `ls`, `pwd`, `find`, or
    `git ls-files` for that check. A `permission.rejected` result is not a
    reason to stop the run.
-4. For each When bullet it runs `opencode run --format json` in this
+4. For each When bullet it runs `opencode run --format json` once in this
    repository, without `--agent`, `--model`, a host, or a port. The message
-   is that When sentence. CHECK-13 reuses the session id from its first run.
-   Every other check gets a new run. A run whose work leaves this repository
-   is Failed; the run stops.
+   is only that German When sentence. CHECK-13 reuses the session id from its
+   first run for the later When sentences of that same check. Every other
+   check gets one new run and is not started again. A run whose work leaves
+   this repository is Failed; the run stops.
 5. It reads the printed JSON for the Coordinator transcript and child
    sessions. It does not prompt a Worker session and it does not call the
    OpenCode HTTP API.
 6. Git measurements use `git -C <repo>` and only the subcommands allowed in
    `.opencode/agents/verifier.md`. Static files are read, not re-parsed with
    ad-hoc scripts.
-7. The Verifier writes evidence and reports failures. It never retries a
-   failed check on another model, and never describes the run as complete
-   while a requested check has no verdict.
+7. The Verifier writes the evidence file for a check before starting the next
+   one. A Passed or Not applicable check is followed by the next check in §5.
+   The first Failed check stops the run. Later checks are not started. It
+   never retries a check, and it describes the run as complete only when every
+   requested check is Passed or Not applicable.
 
 Worker behaviour is observed through the Coordinator transcript, child
 sessions, permission errors, git, and the worktree.
@@ -118,7 +121,7 @@ log with no matching OpenCode source quote in the evidence file.
 ## 5. Run order
 
 Execute in this order unless the human names a subset (then still honour
-dependencies):
+dependencies). One check at a time. The first Failed check ends the run.
 
 | Step | Checks | Why |
 |---|---|---|
