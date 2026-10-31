@@ -71,9 +71,11 @@ OpenCode **cannot** natively cap how many `worker` sessions run at once, count r
 ## Independent template verification
 
 Template verification is separate from project work. Select the `verifier`
-Primary Agent in the local repository and name the checks to run. The
-Verifier updates that repository and discards local changes, then drives
-fresh Coordinator sessions with `opencode run` in the same directory. It
+Primary Agent in the local repository and name the checks to run. Numbered
+checks run in ID order. Not applicable entries are a separate list and are
+not part of that sequence. The Verifier updates that repository and discards
+local changes, then drives fresh Coordinator sessions with `opencode run`
+in the same directory. It
 interacts with the Coordinator as a simulated project user. The same
 procedure applies whether the Verifier session was opened from the website
 or from the HTTP API. Coordinator and Worker instructions do not load the
