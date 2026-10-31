@@ -43,9 +43,11 @@ asks for verification. Communicate with the human in German and write evidence
 in English.
 
 Read `docs/poc/orchestration-verification.md` before the first check. Obey its
-run order and Given/When/Then text. This file wins on tool limits: if a step
-would need a command this file denies, stop that check as Failed and continue
-only with checks that do not depend on it.
+run order and Given/When/Then text. This file wins on tool limits. A shell
+command that returns `permission.rejected` is a command you must not use.
+Do not retry it, do not treat the environment as unstable, and do not stop
+the run because of it. Continue with the allowed tool named below. Stop the
+run only when one of the allowed update commands fails.
 
 You are already inside an OpenCode session. The session directory is the
 local repository. Behave the same way whether this session was opened from
@@ -58,10 +60,11 @@ in that order. This repository has no unit-test runner. Do not search for
 
 ## First step: update the local repository
 
-The repository is this session's directory. Run these commands in this order,
-with `git -C <that directory>`, and no others. They discard uncommitted
-changes, untracked files, and commits that are not on `origin/main`. Do not
-push.
+The repository is this session's directory. The first shell commands are
+exactly these, one command per call, with `git -C <that directory>`. Do not
+combine them with `&&`. Do not run `ls`, `pwd`, `find`, or `git status`
+before this sequence finishes. They discard uncommitted changes, untracked
+files, and commits that are not on `origin/main`. Do not push.
 
 1. `git fetch origin`
 2. `git reset --hard origin/main`
@@ -69,16 +72,23 @@ push.
 4. `git worktree list`, then `git worktree remove <path>` for every path
    other than `<repo>`. No `--force` and no `-f`. This remove is allowed
    only in this step.
+5. `git rev-parse HEAD`
 
-If any command fails, stop the run and report the command and its output.
-Record `git rev-parse HEAD` after the sequence. Do not clone.
+If one of these allowed commands fails, stop the run and report that command
+and its output. Do not clone.
 
 ## How you drive the system under test
 
 1. Run `opencode --version` once and copy that string into the evidence.
-2. If a §6 fixture file is missing, create those files in this repository and
-   commit them once with the allowed `git add` and `git commit` commands. Do
-   not edit them again during checks.
+2. Decide whether each §6 file exists by reading it with the read tool, and
+   only these paths: `docs/requirements/REQ-0901.md`,
+   `docs/functional_specs/FSPEC-0901.md`,
+   `docs/functional_specs/FSPEC-0902.md`,
+   `docs/functional_specs/FSPEC-0903.md`, `poc_fixture/.gitkeep`. A missing
+   file is one the read tool cannot open. Do not use `ls`, `pwd`, `find`, or
+   `git ls-files` for this inventory. Create each missing file with the edit
+   tool, then commit them once with the allowed `git add` and `git commit`
+   commands. Do not edit them again during checks.
 3. For each check, run `opencode run --format json` in this repository. Do not
    pass `--agent`, `--model`, a host, or a port, so `default_agent` applies.
    The message is the When sentence from the plan, unchanged. One run per
@@ -93,9 +103,9 @@ the Coordinator to call an internal tool.
 ## What you may measure locally
 
 Every later git command is `git -C <repo>` plus one subcommand from the
-allowlist above. Use `grep -x` only for the oracle command named in the plan.
-Read static files with the read tool. Write evidence only under
-`docs/poc/evidence/CHECK-*.md`.
+allowlist above, one command per call. Use `grep -x` only for the oracle
+command named in the plan. Read static files and fixture paths with the read
+tool. Write evidence only under `docs/poc/evidence/CHECK-*.md`.
 
 Do not change remotes or edit agent, skill, command, config, or process files.
 

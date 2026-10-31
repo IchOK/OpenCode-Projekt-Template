@@ -53,8 +53,11 @@ with a source. Partial Then satisfaction is **Failed**.
    except the repository itself. Uncommitted changes, untracked files, and
    commits that are not on `origin/main` are discarded. Do not push. If a
    command fails, the run stops. Record `git rev-parse HEAD`.
-3. The Verifier runs `opencode --version` once, copies that string, and
-   commits the §6 fixtures once in this same repository.
+3. The Verifier runs `opencode --version` once and copies that string. It
+   checks the §6 paths with the read tool. It creates and commits only the
+   files that read cannot open. It does not use `ls`, `pwd`, `find`, or
+   `git ls-files` for that check. A `permission.rejected` result is not a
+   reason to stop the run.
 4. For each When bullet it runs `opencode run --format json` in this
    repository, without `--agent`, `--model`, a host, or a port. The message
    is that When sentence. CHECK-13 reuses the session id from its first run.
@@ -133,9 +136,9 @@ dependencies):
 
 ## 6. Fixture package (local repository)
 
-After the update in §2, the Verifier creates the following in the local
-repository, commits them once, and does not edit them again during checks.
-Content is generic (no product domain).
+After the update in §2, the Verifier reads the paths below. It creates and
+commits once only those files the read tool cannot open, and does not edit
+them again during checks. Content is generic (no product domain).
 
 | ID | File | Frontmatter / content |
 |---|---|---|
