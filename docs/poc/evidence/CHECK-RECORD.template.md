@@ -5,7 +5,7 @@ kind: runtime
 enforcement: policy
 started_at: null
 ended_at: null
-disposable_repo: null
+repo: null
 opencode_version: null
 coordinator_model_id: null
 worker_model_id: null

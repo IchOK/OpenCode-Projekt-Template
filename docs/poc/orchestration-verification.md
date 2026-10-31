@@ -7,11 +7,17 @@ the template's agents, configuration, skills and commands behave as intended.
 It does not define Coordinator or Worker duties and is not implementation
 authorization.
 
-The human starts verification explicitly in a disposable copy, selects the
-`verifier` Primary Agent and names the checks to execute. The Verifier drives
-fresh OpenCode sessions through the CLI or API and sends the tested Coordinator
-the same inputs a real project user would send. The plan is not an ambient
-instruction for Coordinator or Worker sessions.
+The human starts verification in the local repository, selects the
+`verifier` Primary Agent, and names the checks to execute. The Verifier is
+already running inside that OpenCode session. It updates the repository,
+discarding local changes, then drives fresh Coordinator sessions with
+`opencode run` in the same directory (§2). It sends the tested Coordinator
+the same inputs a real project user would send. The procedure does not depend
+on whether the Verifier session was opened from the website or from the HTTP
+API, and it does not call that API.
+The plan is not an ambient instruction for Coordinator or Worker sessions.
+"Führe alle Tests aus" means the §5 run order. There is no separate unit-test
+suite in this template.
 
 Sources under test:
 
@@ -37,31 +43,51 @@ with a source. Partial Then satisfaction is **Failed**.
 
 ## 2. Execution model
 
-1. The human creates or identifies a disposable copy of the current template.
-2. The human selects the `verifier` agent in that copy and explicitly requests
-   one or more check IDs.
-3. The Verifier starts fresh isolated OpenCode sessions without overriding
-   `default_agent`, then interacts with the selected Coordinator as a simulated
-   project user.
-4. The Coordinator delegates to Workers through its normal configured workflow.
-   The Verifier does not prompt Workers directly. Worker behaviour is observed
-   via Coordinator transcripts, permission errors, git and the worktree.
-5. The Verifier records evidence and reports failures. It never modifies the
-   system under test to make a check pass.
+1. The human selects the `verifier` agent and names the check IDs, or asks
+   for the full §5 run. The session directory is the local repository. The
+   human does not supply a base URL, host, port, or password.
+2. The Verifier updates that repository and discards local changes, in this
+   order and with no other git writes: `git fetch origin`,
+   `git reset --hard origin/main`, `git clean -fd`, then
+   `git worktree remove <path>` (no `--force`, no `-f`) for every worktree
+   except the repository itself. Uncommitted changes, untracked files, and
+   commits that are not on `origin/main` are discarded. Do not push. If a
+   command fails, the run stops. Record `git rev-parse HEAD`.
+3. The Verifier runs `opencode --version` once, copies that string, and
+   commits the §6 fixtures once in this same repository.
+4. For each When bullet it runs `opencode run --format json` in this
+   repository, without `--agent`, `--model`, a host, or a port. The message
+   is that When sentence. CHECK-13 reuses the session id from its first run.
+   Every other check gets a new run. A run whose work leaves this repository
+   is Failed; the run stops.
+5. It reads the printed JSON for the Coordinator transcript and child
+   sessions. It does not prompt a Worker session and it does not call the
+   OpenCode HTTP API.
+6. Git measurements use `git -C <repo>` and only the subcommands allowed in
+   `.opencode/agents/verifier.md`. Static files are read, not re-parsed with
+   ad-hoc scripts.
+7. The Verifier writes evidence and reports failures. It never retries a
+   failed check on another model, and never describes the run as complete
+   while a requested check has no verdict.
+
+Worker behaviour is observed through the Coordinator transcript, child
+sessions, permission errors, git, and the worktree.
 
 ## 3. Preconditions
 
-- OpenCode V2 is installed and can open the disposable test repository.
-- A model provider is configured locally. Confirm the actual model ID from the
-  provider; do not assume an example ID from this repository.
-- Copy the current template state into a disposable Git repository with at
-  least one commit on `main`. Stop if the working directory is the source
-  template (compare remote URL or a marker file the human names).
+- OpenCode V2 is already running. Copy the version from `opencode --version`.
+  Do not install OpenCode, the GitHub CLI, or sqlite, and do not open
+  `opencode.db`. Do not call the OpenCode HTTP API.
+- A model provider is already configured. Copy `model` from the
+  `opencode run` JSON. Do not assume an example ID from this repository and
+  do not switch the model.
+- The local repository is this session's directory. Checks run there after
+  the update in §2. There is no disposable copy.
 - Do not perform production or safety-critical operations.
-- Use a new OpenCode session when testing default-agent selection. An agent
-  stored on an existing session can mask `default_agent` behavior.
+- CHECK-01 uses a new session. An agent stored on an existing session can
+  mask `default_agent`.
 - Read `workers.max_parallel` and `retries.default_max_corrections_per_issue`
-  from the copy's `config/agent-policy.yaml` (template defaults: `3` and `3`).
+  from the local repository's `config/agent-policy.yaml` (template defaults: `3` and `3`).
 
 ## 4. Status, evidence, measurement
 
@@ -70,8 +96,10 @@ Evidence directory: `docs/poc/evidence/`.
 For each executed check, copy
 [`evidence/CHECK-RECORD.template.md`](evidence/CHECK-RECORD.template.md) to
 `docs/poc/evidence/CHECK-XX.md`. Fill measurements. Non-null numbers and IDs
-must be copied from an OpenCode UI/CLI/session log or from git; otherwise
-`null`.
+must be copied from `opencode --version`, the `opencode run` JSON, or git.
+Otherwise `null`. Leave `started_at` and `ended_at` null;
+quote raw `time.created` and `time.idle` numbers in the measurements table.
+Do not invent or convert them into clock times.
 
 Status values: `Planned`, `Passed`, `Failed`, `Not applicable`.
 
@@ -103,10 +131,11 @@ dependencies):
 | 9 | CHECK-16, CHECK-12 | Cleanup and complete 0901 |
 | 10 | CHECK-10 | No auto-start of 0902 after completion |
 
-## 6. Fixture package (disposable copy only)
+## 6. Fixture package (local repository)
 
-Create the following **in the disposable repository**, not in the source
-template. Content is generic (no product domain).
+After the update in §2, the Verifier creates the following in the local
+repository, commits them once, and does not edit them again during checks.
+Content is generic (no product domain).
 
 | ID | File | Frontmatter / content |
 |---|---|---|
@@ -170,7 +199,7 @@ process lectures to the Coordinator beyond what a real user would type.
 
 ### CHECK-01 — default agent and worker launch
 
-- **Given:** New OpenCode session on the disposable repo; no session-stored agent override.
+- **Given:** New OpenCode session on the local repository; no session-stored agent override.
 - **When:** Open a session without selecting an agent in the UI/CLI (rely on `default_agent`). Then ask: `Starte einen worker nur für den Bootstrap (READY_FOR_MOVE), ohne Implementierung.`
 - **Then:**
   1. Session primary agent is `coordinator` (not `build`).
