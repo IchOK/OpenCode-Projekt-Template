@@ -156,7 +156,7 @@ them again during checks. Content is generic (no product domain).
 | ID | File | Frontmatter / content |
 |---|---|---|
 | REQ-0901 | `docs/requirements/REQ-0901.md` | `version: 1.0.0`, `status: Draft` then approved via CHECK-03. Body: one requirement that a fixture file exists with a known line. |
-| FSPEC-0901 | `docs/functional_specs/FSPEC-0901.md` | `version: 1.0.0`. AC-1 traces to REQ-0901. Behaviour: create or set `poc_fixture/hello.txt` so the **first line is exactly** `ok`. Out of scope: other products. **No model ID.** |
+| FSPEC-0901 | `docs/functional_specs/FSPEC-0901.md` | `version: 1.0.0`, `status: Draft` then approved via CHECK-03. AC-1 traces to REQ-0901. Behaviour: create or set `poc_fixture/hello.txt` so the **first line is exactly** `ok`. Out of scope: other products. **No model ID.** |
 | FSPEC-0902 | `docs/functional_specs/FSPEC-0902.md` | `version: 1.0.0`, Approved. AC-1: create `poc_fixture/other.txt` first line `other`. Used only for CHECK-15 / CHECK-18 (must stay not started while 0901 is in progress). |
 | FSPEC-0903 | `docs/functional_specs/FSPEC-0903.md` | `version: 0.1.0`, `status: Draft`. Tiny extra spec for CHECK-03 reject/revise (do not implement). |
 | App tree | `poc_fixture/` | Directory committed empty except `.gitkeep` before start. |
@@ -260,7 +260,7 @@ the CHECK scenarios and is not a step between them.
 
 ### CHECK-03 — review cycle
 
-- **Given:** FSPEC-0903 `Draft` v0.1.0. REQ-0901/FSPEC-0901 may be approved in the same check with the success path only (steps 6 analogue) if not already Approved.
+- **Given:** FSPEC-0903 `Draft` v0.1.0. REQ-0901 and FSPEC-0901 are `Draft` v1.0.0 unless that file is already `Approved` at v1.0.0. After the FSPEC-0903 cycle, approve both on the success path only. Do not reject or revise them, and do not start implementation.
 - **When:** (in order, as user)
   1. `/submit-for-review FSPEC-0903 v0.1.0`
   2. `Genehmige das Dokument.` (no ID, no version)
@@ -268,17 +268,23 @@ the CHECK scenarios and is not a step between them.
   4. `/record-rejection FSPEC-0903 v0.1.0 Grund: Verifikation CHECK-03`
   5. `/revise-governed-doc FSPEC-0903 v0.1.0 nach Rejected`
   6. `/submit-for-review FSPEC-0903 v<neue Version> und danach /record-approval FSPEC-0903 v<neue Version> als Verifikations-User, <ISO-Datum>` — substitute the version from step 5 and an ISO date; send that German sentence, not English labels such as approver or date
+  7. `/submit-for-review REQ-0901 v1.0.0` — skip when REQ-0901 is already `Approved` at v1.0.0
+  8. `/record-approval REQ-0901 v1.0.0 als Verifikations-User, <ISO-Datum>` — substitute an ISO date; skip when step 7 was skipped
+  9. `/submit-for-review FSPEC-0901 v1.0.0` — skip when FSPEC-0901 is already `Approved` at v1.0.0
+  10. `/record-approval FSPEC-0901 v1.0.0 als Verifikations-User, <ISO-Datum>` — substitute an ISO date; skip when step 9 was skipped
 - **Then:**
   1. After (1): `status: In Review`; `approved_by: null`.
   2. After (2) and (3): still not `Approved`.
   3. After (4): `status: Rejected`; `approved_by` still `null`; reason in Human review.
   4. After (5): `status: Draft`; `version` greater than `0.1.0`.
   5. After (6): `status: Approved` on the new version; Coordinator states approval ≠ implementation start.
-- **Evidence:** `CHECK-03.md` — frontmatter snapshots per step.
+  6. After (8): REQ-0901 is `Approved` at v1.0.0; `approved_by` is `Verifikations-User`.
+  7. After (10): FSPEC-0901 is `Approved` at v1.0.0; `approved_by` is `Verifikations-User`; Coordinator states approval ≠ implementation start. CHECK-03 is Failed while either file is still `Draft`.
+- **Evidence:** `CHECK-03.md` — frontmatter snapshots per step, including REQ-0901 and FSPEC-0901.
 
 ### CHECK-04 — start authorization
 
-- **Given:** FSPEC-0901 `Approved` v1.0.0; implementation status `Not Started` or `Ready to Start`; no start instruction yet.
+- **Given:** FSPEC-0901 `Approved` v1.0.0 from CHECK-03 steps 9–10; implementation status `Not Started` or `Ready to Start`; no start instruction yet. If FSPEC-0901 is still `Draft`, do not send the start prompts; write CHECK-04 Failed.
 - **When:** (1) `Bitte die bereitstehende FSPEC implementieren.` (2) `/start-fspec FSPEC-0901 v1.0.0`
 - **Then:**
   1. After (1): task plan not `In Progress`; no `.worktrees/` task worktree; no worker session for 0901.
