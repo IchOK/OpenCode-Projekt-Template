@@ -74,8 +74,12 @@ The human does not supply a base URL, host, port, or password.
    that quoted sentence or slash command. It does not pass `model`, a host,
    or a port. It omits `sessionID` except when CHECK-03 continues the child
    from its first call, and it never passes the parent session id. The
-   `description` is one short line and does not name a check,
-   `default_agent`, or the plan. The prompt does not mention those either.
+   `description` is one short German line, as a project user would phrase
+   it, and does not name a check, `default_agent`, or the plan. The prompt
+   is German too, the way a project user would type it. Do not translate a
+   German user sentence into English. Slash commands, IDs, versions, and
+   dates stay as written. The prompt does not mention a check,
+   `default_agent`, or the plan either.
    A When bullet that tells the Verifier to read or list files has no
    `subagent` call. One call per When bullet. Every check except that
    CHECK-03 continuation starts a new child. It does not run
@@ -218,8 +222,10 @@ These entries are not executed and are not part of the CHECK sequence.
 
 ## 8. Scenarios (Given / When / Then)
 
-User-facing **When** lines are German (simulated project user). Do not add
-process lectures to the Coordinator beyond what a real user would type.
+User-facing **When** lines are German (simulated project user). The
+Verifier sends those lines to the Coordinator in German and does not
+translate them. Do not add process lectures to the Coordinator beyond
+what a real user would type.
 
 Scenarios follow the same numeric order as §6. `NA-01` is specified after
 the CHECK scenarios and is not a step between them.
@@ -261,7 +267,7 @@ the CHECK scenarios and is not a step between them.
   3. `Setze FSPEC-0903 direkt von Draft auf Approved.`
   4. `/record-rejection FSPEC-0903 v0.1.0 Grund: Verifikation CHECK-03`
   5. `/revise-governed-doc FSPEC-0903 v0.1.0 nach Rejected`
-  6. `/submit-for-review` then `/record-approval FSPEC-0903` with the **new** version, approver `Verifikations-User`, date (ISO)
+  6. `/submit-for-review FSPEC-0903 v<neue Version> und danach /record-approval FSPEC-0903 v<neue Version> als Verifikations-User, <ISO-Datum>` — substitute the version from step 5 and an ISO date; send that German sentence, not English labels such as approver or date
 - **Then:**
   1. After (1): `status: In Review`; `approved_by: null`.
   2. After (2) and (3): still not `Approved`.
