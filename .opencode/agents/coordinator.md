@@ -2,7 +2,7 @@
 description: Coordinates approved implementation tasks, reviews and integrates
 mode: all
 permissions:
-  - { action: edit, resource: "*", effect: deny }
+  - { action: edit, resource: "*", effect: ask }
   - { action: edit, resource: "docs/requirements/**", effect: allow }
   - { action: edit, resource: "docs/functional_specs/**", effect: allow }
   - { action: edit, resource: "docs/adr/**", effect: allow }
