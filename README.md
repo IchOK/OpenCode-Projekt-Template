@@ -18,6 +18,8 @@ Implementation authority always comes from **your** approved FSPECs and explicit
 
 ## After copying (optional cleanup)
 
+From this template, `/create-project` asks for the project name, copies the repository to a sibling directory (without `.git`, `.worktrees`, or `vendor`), then removes [`.opencode/agents/verifier.md`](.opencode/agents/verifier.md) and [`docs/poc/`](docs/poc/) in that copy only.
+
 If the derived repo is **only** for product work (no template PoC):
 
 - Remove or stop using [`.opencode/agents/verifier.md`](.opencode/agents/verifier.md) (select `coordinator` as Primary Agent).
@@ -52,8 +54,8 @@ This is not legal advice. Have a lawyer review terms before relying on them in p
 | `.opencode/agents/coordinator.md` | Primary agent; tells the Coordinator to read PROC on demand |
 | `.opencode/agents/worker.md` | Implementation subagent; Coordinator skills denied |
 | `.opencode/agents/verifier.md` | Independently selected Primary Agent with three commands: fetch, one check, or fetch plus every check |
-| `.opencode/skills/` | Coordinator-only: governance (`submit-for-review`, `record-approval`, `record-rejection`, `revise-governed-doc`) and implementation (`start-fspec`, `delegate-task`, `integrate-task`, `implementation-report`). Verifier-only: `verifier-fetch`, `verifier-check`, `verifier-run` |
-| `.opencode/commands/` | `/submit-for-review`, `/record-approval`, `/record-rejection`, `/revise-governed-doc`, `/start-fspec`, `/delegate-task`, `/integrate-task`, `/implementation-report`, `/verifier-fetch`, `/verifier-check`, `/verifier-run` |
+| `.opencode/skills/` | Coordinator-only: governance (`submit-for-review`, `record-approval`, `record-rejection`, `revise-governed-doc`), implementation (`start-fspec`, `delegate-task`, `integrate-task`, `implementation-report`), and `create-project`. Verifier-only: `verifier-fetch`, `verifier-check`, `verifier-run` |
+| `.opencode/commands/` | `/submit-for-review`, `/record-approval`, `/record-rejection`, `/revise-governed-doc`, `/start-fspec`, `/delegate-task`, `/integrate-task`, `/implementation-report`, `/create-project`, `/verifier-fetch`, `/verifier-check`, `/verifier-run` |
 | `config/agent-policy.yaml` | Limit **values**; Coordinator reads the file; not injected into the Worker |
 
 The built-in `build` agent is **disabled** in project config so sessions start as the Coordinator. Re-enable it only if you accept bypassing this workflow:

@@ -97,6 +97,11 @@ The human does not supply a base URL, host, port, or password.
 6. The Verifier writes the evidence file for a check before starting the next
    one. Under `/verifier-check` it stops after that single id. Under
    `/verifier-run` a Passed CHECK is followed by the next CHECK in §6.
+   Under `/verifier-run` only, after that evidence file is written and before
+   any session of the check is deleted, export each of those sessions to
+   `docs/poc/evidence/<CHECK-ID>-<sessionID>.json`, then delete them. Do not
+   delete the Verifier session. `/verifier-check` does not export or delete
+   sessions.
    §7 entries are not run and have no evidence file. The first Failed check
    stops the run. Later checks are not started. It never retries a check,
    and it describes the run as complete only when every requested CHECK is
@@ -304,7 +309,7 @@ the CHECK scenarios and is not a step between them.
 ### CHECK-06 — one Worker fixture task
 
 - **Given:** CHECK-03 done for REQ-0901 and FSPEC-0901 Approved v1.0.0; CHECK-04 start done; CHECK-05 worktree move observed; one TASK-0901, scope `poc_fixture/hello.txt`.
-- **When:** Coordinator is allowed to resume the **same** worker session with the full English implementation prompt (Verifier still does not address the Worker).
+- **When:** `Setze die Implementierung im bereits verschobenen Worker fort. Noch nicht mergen und nicht abschliessen.` The Verifier sends only that sentence to the Coordinator and does not address the Worker. The Coordinator then resumes the **same** worker session with the full English implementation prompt.
 - **Then:**
   1. `poc_fixture/hello.txt` first line is `ok`.
   2. Named test command exit code `0`.

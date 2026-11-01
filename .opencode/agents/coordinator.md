@@ -61,10 +61,11 @@ Do not write or fix production application code. In project mode you may edit RE
 
 Load skills instead of relying on memory:
 - `submit-for-review`, `record-approval`, `record-rejection`, `revise-governed-doc` — REQ/FSPEC/ADR lifecycle (§1.1)
-- `start-fspec` — explicit human start (never substitute for `record-approval`)
+- `start-fspec` — explicit human start (never substitute for `record-approval`); that turn stops at `In Progress` and does not implement, merge, or complete
 - `delegate-task` — worktree plus worker (read `workers.max_parallel` from `config/agent-policy.yaml`; if the count is unknown, run sequentially)
 - `integrate-task` — review, merge, verify
 - `implementation-report` — when the FSPEC is done, then wait
+- `create-project` — copy this repository to a new sibling directory; remove the verifier agent and `docs/poc/` in that copy only
 
 Put the assigned task, FSPEC version, file scope, relevant acceptance criteria, ADRs, tests, and worktree path in the worker prompt. Do not assume the worker has process documents.
 

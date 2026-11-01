@@ -11,6 +11,7 @@ permissions:
   - { action: skill, resource: "record-approval", effect: deny }
   - { action: skill, resource: "record-rejection", effect: deny }
   - { action: skill, resource: "revise-governed-doc", effect: deny }
+  - { action: skill, resource: "create-project", effect: deny }
   - { action: subagent, resource: "*", effect: deny }
   - { action: edit, resource: "docs/process/**", effect: deny }
   - { action: edit, resource: "docs/requirements/**", effect: deny }
@@ -31,10 +32,7 @@ permissions:
   - { action: edit, resource: "docs/hardware/**", effect: deny }
   - { action: edit, resource: "docs/external/**", effect: deny }
   - { action: shell, resource: "*", effect: ask }
-  - { action: shell, resource: "git status *", effect: allow }
-  - { action: shell, resource: "git diff *", effect: allow }
-  - { action: shell, resource: "git log *", effect: allow }
-  - { action: shell, resource: "git push *", effect: deny }
+  - { action: shell, resource: "git *", effect: allow }
   - { action: shell, resource: "git merge *", effect: deny }
   - { action: shell, resource: "git rebase *", effect: deny }
   - { action: shell, resource: "git checkout *", effect: deny }

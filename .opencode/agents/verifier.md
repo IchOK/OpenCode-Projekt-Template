@@ -35,6 +35,8 @@ permissions:
   - { action: shell, resource: "git -C * -c user.name=verifier -c user.email=verifier@local commit -m *", effect: allow }
   - { action: shell, resource: "grep -x *", effect: allow }
   - { action: shell, resource: "opencode --version", effect: allow }
+  - { action: shell, resource: "opencode session export *", effect: allow }
+  - { action: shell, resource: "opencode session delete *", effect: allow }
   - { action: shell, resource: "opencode run *", effect: deny }
   - { action: shell, resource: "git push *", effect: deny }
   - { action: shell, resource: "git remote *", effect: deny }

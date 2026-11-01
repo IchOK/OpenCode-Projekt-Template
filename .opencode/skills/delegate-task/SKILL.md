@@ -21,7 +21,7 @@ Use this skill before any implementation edit. Workers must not share the Coordi
 2. Launch the `worker` subagent in the foreground with a bootstrap-only prompt containing the task ID and target worktree path. Instruct it to use no tools, perform no implementation work and return only `READY_FOR_MOVE`.
 3. Capture the child `sessionID` after the bootstrap call completes. Stop if no child session ID is returned or the response reports any work.
 4. Move that child session into the worktree with `session_move`.
-5. At the next delivery boundary, continue the same child session by passing its `sessionID` to `subagent` with the complete Worker prompt below. This later call is the first call allowed to inspect or modify task files.
+5. Do not continue the child in the same turn as the bootstrap. A later human message must ask to continue that worker before you pass its `sessionID` to `subagent` with the complete Worker prompt below. That later call is the first call allowed to inspect or modify task files. Until then the plan stays `In Progress`.
 6. Stop and report the blocker if the child cannot be moved or resumed. Do not fall back to implementation in the Coordinator checkout.
 7. Native subagent context isolation is not filesystem isolation. Do not skip the worktree.
 

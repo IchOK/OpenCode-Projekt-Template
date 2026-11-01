@@ -24,10 +24,11 @@ Use this skill when the human asks to start, begin, or authorize implementation 
 4. If implementation status is `Not Started`, the Coordinator may first set `Ready to Start` after checking prerequisites. Do not skip the human start instruction for `In Progress`.
 5. Set implementation status to `In Progress` only after the explicit start instruction.
 6. Record authorization identity, timestamp, FSPEC ID and version in the task plan (`Start authorization:`).
-7. Do not edit application code. Delegate via the `delegate-task` skill.
+7. Do not edit application code. You may run only the bootstrap part of `delegate-task`: create the task worktree, launch the worker for `READY_FOR_MOVE`, and `session_move`. That bootstrap is not implementation.
 
 ## Stop
 
+- After the plan is `In Progress`, the start authorization is recorded, and the FSPEC branch is checked out, this turn ends. Do not send the worker implementation prompt. Do not merge, do not integrate, and do not set the plan or any task to `Completed`. Wait for a later human message.
 - If the FSPEC is not approved, the version mismatches, authorization is inferred, or the base/integration branch is ambiguous: leave status unchanged, explain in German, wait.
 - Never start a second FSPEC because the first one finished.
 - Never set `In Progress` while another versioned task plan is already `In Progress` (§3 single active FSPEC).
