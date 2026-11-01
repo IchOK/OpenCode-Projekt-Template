@@ -9,6 +9,12 @@
   "worktree": {
     "directory": ".worktrees",
   },
+  // The Verifier launches the Coordinator through the subagent tool, and the
+  // Coordinator then launches a Worker. The default depth of 1 blocks that
+  // second level.
+  "experimental": {
+    "subagent_depth": 2,
+  },
   "permissions": [
     { "action": "external_directory", "resource": "*", "effect": "ask" },
   ],

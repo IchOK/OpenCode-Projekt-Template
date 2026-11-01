@@ -232,7 +232,7 @@ the CHECK scenarios and is not a step between them.
 
 | Probe | Expected |
 |---|---|
-| `opencode.jsonc` | Parses as JSONC; `default_agent` is `coordinator`; `agents.build.disabled` is `true`; `worktree.directory` is `.worktrees`; `policies` contain `git push` force denies |
+| `opencode.jsonc` | Parses as JSONC; `default_agent` is `coordinator`; `agents.build.disabled` is `true`; `worktree.directory` is `.worktrees`; `experimental.subagent_depth` is `2`; `policies` contain `git push` force denies |
 | Skills vs commands | Files exist for `start-fspec`, `delegate-task`, `integrate-task`, `implementation-report`, `submit-for-review`, `record-approval`, `record-rejection`, `revise-governed-doc` under both `.opencode/skills/<name>/SKILL.md` and `.opencode/commands/<name>.md` |
 | Worker skill deny | `worker.md` lists those skill IDs with `effect: deny` |
 | Coordinator edit | Allows `docs/requirements/**`, `docs/functional_specs/**`, `docs/adr/**`, `docs/tasks/**`, `docs/implementation/**`, `docs/execution/**`; denies `docs/process/**`, `docs/poc/**`, `docs/templates/**`, `config/**`, `.opencode/**`; `ask` on `project/**` and `AGENTS.md` |
@@ -244,7 +244,7 @@ the CHECK scenarios and is not a step between them.
 
 ### CHECK-02 — default agent and worker launch
 
-- **Given:** The Verifier session is already open. `default_agent` is `coordinator`, and that agent is `mode: all` so the `subagent` tool can launch it. No `model` argument is passed, so the child uses the Verifier session's model.
+- **Given:** The Verifier session is already open. `default_agent` is `coordinator`, and that agent is `mode: all` so the `subagent` tool can launch it. `experimental.subagent_depth` is `2`, so that Coordinator child can launch a Worker. No `model` argument is passed, so the child uses the Verifier session's model.
 - **When:** `Starte einen worker nur für den Bootstrap (READY_FOR_MOVE), ohne Implementierung.`
 - **Then:**
   1. The `subagent` child session's agent is `coordinator` (not `build`).
