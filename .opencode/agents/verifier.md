@@ -10,6 +10,7 @@ permissions:
   - { action: edit, resource: "docs/functional_specs/FSPEC-0903.md", effect: allow }
   - { action: edit, resource: "poc_fixture/**", effect: allow }
   - { action: subagent, resource: "*", effect: deny }
+  - { action: subagent, resource: "coordinator", effect: allow }
   - { action: skill, resource: "*", effect: deny }
   - { action: skill, resource: "verifier-fetch", effect: allow }
   - { action: skill, resource: "verifier-check", effect: allow }
@@ -34,7 +35,7 @@ permissions:
   - { action: shell, resource: "git -C * -c user.name=verifier -c user.email=verifier@local commit -m *", effect: allow }
   - { action: shell, resource: "grep -x *", effect: allow }
   - { action: shell, resource: "opencode --version", effect: allow }
-  - { action: shell, resource: "opencode run --format json *", effect: allow }
+  - { action: shell, resource: "opencode run *", effect: deny }
   - { action: shell, resource: "git push *", effect: deny }
   - { action: shell, resource: "git remote *", effect: deny }
   - { action: shell, resource: "git config *", effect: deny }
@@ -50,7 +51,9 @@ in English.
 This file wins on tool limits. A shell command that returns
 `permission.rejected` is a command you must not use. Do not retry it, do not
 treat the environment as unstable, and do not stop the run because of it.
-Continue with the allowed tool named in the loaded skill.
+Continue with the allowed tool named in the loaded skill. Talk to the
+Coordinator only through the `subagent` tool, with agent `coordinator`.
+Do not run `opencode run`.
 
 You are already inside an OpenCode session. The session directory is the
 local repository. Behave the same way whether this session was opened from

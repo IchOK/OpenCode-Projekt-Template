@@ -13,8 +13,10 @@ is already running inside that OpenCode session. `/verifier-fetch` only
 updates the repository. `/verifier-check` runs one id and does not update the
 repository. `/verifier-run` updates the repository and then drives the CHECKs
 (§2). It sends the tested Coordinator the same inputs a real project user
-would send. The procedure does not depend on whether the Verifier session was
-opened from the website or from the HTTP API, and it does not call that API.
+would send, through the OpenCode `subagent` tool. The shell command
+`opencode run` is not used. The procedure does not depend on whether the
+Verifier session was opened from the website or from the HTTP API, and it
+does not call that API.
 The plan is not an ambient instruction for Coordinator or Worker sessions.
 "Führe alle Tests aus" means every CHECK in §6, in numeric order. The Not
 applicable list is not part of that run. There is no separate unit-test
@@ -66,16 +68,25 @@ The human does not supply a base URL, host, port, or password.
    files that read cannot open. It does not use `ls`, `pwd`, `find`, or
    `git ls-files` for that check. A `permission.rejected` result is not a
    reason to stop the run. `/verifier-fetch` does not run this step.
-3. For each When bullet it runs `opencode run --format json` once in this
-   repository, without `--agent`, `--model`, a host, or a port. The message
-   is only that German When sentence. A When bullet that tells the Verifier
-   to read or list files has no `opencode run`. CHECK-03 reuses the session
-   id from its first run for the later When sentences of that same check.
-   Every other check gets one new run and is not started again. A run whose
-   work leaves this repository is Failed; the run stops.
-4. It reads the printed JSON for the Coordinator transcript and child
-   sessions. It does not prompt a Worker session and it does not call the
-   OpenCode HTTP API.
+3. For each When bullet that contains a quoted user message or a slash
+   command, it calls the OpenCode `subagent` tool once, in the foreground.
+   `agent` is `coordinator`, `background` is false, and `prompt` is only
+   that quoted sentence or slash command. It does not pass `model`, a host,
+   or a port. It omits `sessionID` except when CHECK-03 continues the child
+   from its first call, and it never passes the parent session id. The
+   `description` is one short line and does not name a check,
+   `default_agent`, or the plan. The prompt does not mention those either.
+   A When bullet that tells the Verifier to read or list files has no
+   `subagent` call. One call per When bullet. Every check except that
+   CHECK-03 continuation starts a new child. It does not run
+   `opencode run` and it does not start a Coordinator or Worker session
+   from the shell. A rejected `subagent` call is not replaced with a shell
+   command. A call whose work leaves this repository is Failed; the run
+   stops.
+4. It reads the `subagent` tool result for the Coordinator transcript and
+   child sessions. It does not prompt a Worker session, it does not call
+   `subagent` with agent `worker`, and it does not call the OpenCode HTTP
+   API.
 5. Git measurements use `git -C <repo>` and only the subcommands allowed in
    `.opencode/agents/verifier.md`. Static files are read, not re-parsed with
    ad-hoc scripts.
@@ -95,15 +106,16 @@ sessions, permission errors, git, and the worktree.
 - OpenCode V2 is already running. Copy the version from `opencode --version`.
   Do not install OpenCode, the GitHub CLI, or sqlite, and do not open
   `opencode.db`. Do not call the OpenCode HTTP API.
-- A model provider is already configured. Copy `model` from the
-  `opencode run` JSON. Do not assume an example ID from this repository and
-  do not switch the model.
+- A model provider is already configured on the Verifier session. Do not
+  pass `model` on the `subagent` call. Copy `model` from that tool result.
+  Do not assume an example ID from this repository and do not switch the
+  model.
 - The local repository is this session's directory. `/verifier-run` runs
   checks there after the update in §2. `/verifier-check` uses the tree as it
   is. There is no disposable copy.
 - Do not perform production or safety-critical operations.
-- CHECK-02 uses a new session. An agent stored on an existing session can
-  mask `default_agent`.
+- CHECK-02 starts a new `subagent` child and does not pass `sessionID` or
+  `model`. CHECK-03 is the only check that reuses a child session id.
 - Read `workers.max_parallel` and `retries.default_max_corrections_per_issue`
   from the local repository's `config/agent-policy.yaml` (template defaults: `3` and `3`).
 
@@ -115,7 +127,7 @@ For each executed CHECK, copy
 [`evidence/CHECK-RECORD.template.md`](evidence/CHECK-RECORD.template.md) to
 `docs/poc/evidence/CHECK-XX.md`. Do not write an evidence file for a §7
 entry. Fill measurements. Non-null numbers and IDs
-must be copied from `opencode --version`, the `opencode run` JSON, or git.
+must be copied from `opencode --version`, the `subagent` tool result, or git.
 Otherwise `null`. Leave `started_at` and `ended_at` null;
 quote raw `time.created` and `time.idle` numbers in the measurements table.
 Do not invent or convert them into clock times.
@@ -232,13 +244,13 @@ the CHECK scenarios and is not a step between them.
 
 ### CHECK-02 — default agent and worker launch
 
-- **Given:** New OpenCode session on the local repository; no session-stored agent override.
-- **When:** Open a session without selecting an agent in the UI/CLI (rely on `default_agent`). Then ask: `Starte einen worker nur für den Bootstrap (READY_FOR_MOVE), ohne Implementierung.`
+- **Given:** The Verifier session is already open. `default_agent` is `coordinator`, and that agent is `mode: all` so the `subagent` tool can launch it. No `model` argument is passed, so the child uses the Verifier session's model.
+- **When:** `Starte einen worker nur für den Bootstrap (READY_FOR_MOVE), ohne Implementierung.`
 - **Then:**
-  1. Session primary agent is `coordinator` (not `build`).
+  1. The `subagent` child session's agent is `coordinator` (not `build`).
   2. A child session ID for `worker` exists.
   3. Bootstrap reply is exactly `READY_FOR_MOVE` (no file edits).
-- **Evidence:** `CHECK-02.md` — agent name from OpenCode UI/CLI, child `sessionID`, bootstrap transcript excerpt.
+- **Evidence:** `CHECK-02.md` — agent name, Coordinator `sessionID`, worker session id, and bootstrap transcript excerpt, copied from the `subagent` tool result.
 
 ### CHECK-03 — review cycle
 

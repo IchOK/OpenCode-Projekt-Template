@@ -1,6 +1,6 @@
 ---
 description: Coordinates approved implementation tasks, reviews and integrates
-mode: primary
+mode: all
 permissions:
   - { action: edit, resource: "*", effect: deny }
   - { action: edit, resource: "docs/requirements/**", effect: allow }

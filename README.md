@@ -76,8 +76,8 @@ Primary Agent in the local repository and use one command.
 runs one numbered check and does not update the repository.
 `/verifier-run` updates the repository and then runs the numbered checks
 in ID order. Not applicable entries are a separate list and are not run.
-The Verifier drives fresh Coordinator sessions with `opencode run` in the
-same directory. It
+The Verifier drives fresh Coordinator sessions with the OpenCode `subagent`
+tool in the same directory. It
 interacts with the Coordinator as a simulated project user. The same
 procedure applies whether the Verifier session was opened from the website
 or from the HTTP API. Coordinator and Worker instructions do not load the
