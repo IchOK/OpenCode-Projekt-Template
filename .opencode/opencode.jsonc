@@ -16,7 +16,9 @@
     "subagent_depth": 2,
   },
   "permissions": [
+    { "action": "*", "resource": "*", "effect": "allow" },
     { "action": "external_directory", "resource": "*", "effect": "ask" },
+    { "action": "shell", "resource": "*", "effect": "ask" },
   ],
   "policies": [
     // Normal Coordinator pushes remain `ask`; common forced forms are hard-denied.
@@ -29,6 +31,32 @@
   "agents": {
     "build": {
       "disabled": true,
+    },
+    "coordinator": {
+      "permissions": [
+        { "action": "subagent", "resource": "*", "effect": "deny" },
+        // ESP-IDF project:
+        // { "action": "external_directory", "resource": "/opt/esp/idf/*", "effect": "allow" },
+        // { "action": "read", "resource": "/opt/esp/idf/*", "effect": "allow" },
+        // { "action": "edit", "resource": "/opt/esp/idf/*", "effect": "deny" },
+        // Device access, using the exact command this project runs:
+        // { "action": "shell", "resource": "ssh *", "effect": "allow" },
+      ],
+    },
+    // Appended before .opencode/agents/worker.md. The last matching rule wins,
+    // so project allows belong after these two defaults. worker.md still
+    // appends its git allow and the git deny rules after this list.
+    "worker": {
+      "permissions": [
+        { "action": "skill", "resource": "*", "effect": "deny" },
+        { "action": "subagent", "resource": "*", "effect": "deny" },
+        // ESP-IDF project:
+        // { "action": "external_directory", "resource": "/opt/esp/idf/*", "effect": "allow" },
+        // { "action": "read", "resource": "/opt/esp/idf/*", "effect": "allow" },
+        // { "action": "edit", "resource": "/opt/esp/idf/*", "effect": "deny" },
+        // Device access, using the exact command this project runs:
+        // { "action": "shell", "resource": "ssh *", "effect": "allow" },
+      ],
     },
   },
 }
